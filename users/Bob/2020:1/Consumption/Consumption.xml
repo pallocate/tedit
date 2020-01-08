@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<product desc="Anything in the economy." id="100035" name="Product"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="products.xsd">
+    <product id="50000000" name="Food">
+        <product amount="1" analogue="true" desc="Milk" down="15"
+            id="50131700" name="Milk" price="14" unit="Litre" up="15">
+            <product amount="1" desc="Nice and creamy!" id="150131700"
+                name="Linda´s Creamy milk" unit="Litre"/>
+            <product amount="1" desc="Milk" id="250131700"
+                name="HIC coop" unit="Litre"/>
+        </product>
+        <product desc="Chicken eggs" down="5" id="150131600" name="Eggs"
+            price="32" unit="Piece" up="4"/>
+    </product>
+    <product id="78000000" name="Transport">
+        <product desc="Transports people and cargo" id="178101800"
+            name="Formosa Heights Taxi" prefix="Kilo" price="112" unit="Metre"/>
+    </product>
+</product>

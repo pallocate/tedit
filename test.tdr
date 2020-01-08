@@ -1,0 +1,1 @@
+{"proposal":{"header":{"version":1,"id":0,"year":0,"iteration":0,"level":0,"target":"UNDEFINED","timestamp":0},"products":[{"id":178101800,"qty":2},{"id":150131600,"qty":300},{"id":150131700,"qty":9}]},"relation":{"other":{"contactId":2,"name":"St Marys","publicKey":[],"group":"","icon":""},"target":"CONSUMPTION","roles":["PROPOSER","DATA_SUBJECT","COUNCIL_SIGNER"]},"channel":{}}

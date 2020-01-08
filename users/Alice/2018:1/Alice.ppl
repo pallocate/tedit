@@ -1,0 +1,62 @@
+[PROPOSAL]
+Version:    1
+Year:       2018
+Iteration:  1
+Tree:       Consumption
+Level:      7
+Link:       647635267
+
+[PRODUCT]
+Id:         501316001
+Qty:        0
+Name:       Eggs
+Desc:       Chicken eggs
+Unit:       Piece
+Down:       5
+Up:         5
+Price:      32
+
+[PRODUCT]
+Id:         50131700
+Qty:        0
+Name:       Milk
+Desc:       Milk
+Unit:       Litre
+Down:       15
+Up:         15
+Price:      13
+Analogue:   true
+
+[PRODUCT]
+Id:         601410021
+Qty:        0
+Name:       Teddy bear
+Desc:       Stuffed teddy bear
+Unit:       Piece
+Down:       15
+Up:         15
+Price:      43
+Analogue:   true
+
+[PRODUCT]
+Id:         551015101
+Qty:        0
+Name:       Novel
+Desc:       Leisural book
+Unit:       Piece
+Down:       10
+Up:         15
+Price:      25
+Analogue:   true
+
+[PRODUCT]
+Id:         178101800
+Qty:        0
+Name:       Formosa Heights Taxi
+Desc:       Transports people and cargo
+Prefix:     Kilo
+Unit:       Metre
+Down:       10
+Up:         15
+Price:      112
+Analogue:   true
