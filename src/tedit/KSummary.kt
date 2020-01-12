@@ -3,7 +3,6 @@ package tedit
 import java.io.File
 import java.net.URL
 import javax.swing.JEditorPane
-import javax.swing.JWindow
 import javax.swing.event.HyperlinkListener
 import javax.swing.event.HyperlinkEvent
 import pen.Log

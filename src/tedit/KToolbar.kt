@@ -5,7 +5,6 @@ import java.awt.event.ActionListener
 import java.awt.event.ActionEvent
 import javax.swing.JButton
 import javax.swing.AbstractButton
-import javax.swing.JMenuItem
 import javax.swing.JToolBar
 import javax.swing.ImageIcon
 import pen.Constants.SLASH
@@ -22,7 +21,7 @@ class KToolbar (hamburgerButton : AbstractButton) : JToolBar(), ActionListener
       addSeparator(Dimension( 7, 24 ))
       button.setIcon(ImageIcon( "${ICONS_DIR}${SLASH}document-save.png" ))
       button.setBorder( null )
-      button.setToolTipText( Ref.word( 18 ) )
+      button.setToolTipText( Lang.word( 18 ) )
       button.addActionListener( this )
       button.setActionCommand( EventHandler.SAVE )
       add( button )
@@ -31,7 +30,7 @@ class KToolbar (hamburgerButton : AbstractButton) : JToolBar(), ActionListener
       button = JButton()
       button.setIcon(ImageIcon( "${ICONS_DIR}${SLASH}edit-find.png" ))
       button.setBorder( null )
-      button.setToolTipText( Ref.word( 251 ) )
+      button.setToolTipText( Lang.word( 251 ) )
       button.addActionListener( this )
       button.setActionCommand( EventHandler.SEARCH )
       add( button )
@@ -40,7 +39,7 @@ class KToolbar (hamburgerButton : AbstractButton) : JToolBar(), ActionListener
       button = JButton()
       button.setIcon(ImageIcon( "${ICONS_DIR}${SLASH}list-add.png" ))
       button.setBorder( null )
-      button.setToolTipText( Ref.word( 352 ) )
+      button.setToolTipText( Lang.word( 352 ) )
       button.addActionListener( this )
       button.setActionCommand( EventHandler.ADD )
       add( button )
@@ -49,7 +48,7 @@ class KToolbar (hamburgerButton : AbstractButton) : JToolBar(), ActionListener
       button = JButton()
       button.setIcon(ImageIcon( "${ICONS_DIR}${SLASH}list-remove.png" ))
       button.setBorder( null )
-      button.setToolTipText( Ref.word( 253 ) )
+      button.setToolTipText( Lang.word( 253 ) )
       button.addActionListener( this )
       button.setActionCommand( EventHandler.REMOVE )
       add( button )
@@ -59,16 +58,16 @@ class KToolbar (hamburgerButton : AbstractButton) : JToolBar(), ActionListener
       button = JButton()
       button.setIcon(ImageIcon( "${ICONS_DIR}${SLASH}emblem-default.png" ))
       button.setBorder( null )
-      button.setToolTipText( Ref.word( 354 ) )
+      button.setToolTipText( Lang.word( 354 ) )
       button.addActionListener( this )
-      button.setActionCommand( EventHandler.TENDER )
+      button.setActionCommand( EventHandler.SUBMIT )
       add( button )
 
       addSeparator(Dimension( 21, 24 ))
       button = JButton()
       button.setIcon(ImageIcon( "${ICONS_DIR}${SLASH}help-browser.png" ))
       button.setBorder( null )
-      button.setToolTipText( Ref.word( 28 ) )
+      button.setToolTipText( Lang.word( 28 ) )
       button.addActionListener( this )
       button.setActionCommand( EventHandler.HELP )
       add( button )
@@ -77,7 +76,7 @@ class KToolbar (hamburgerButton : AbstractButton) : JToolBar(), ActionListener
       hamburgerButton.setIcon(ImageIcon( "${ICONS_DIR}${SLASH}hamburger_icon_24.png" ))
       hamburgerButton.setBorder( null )
       hamburgerButton.setPreferredSize(Dimension( 28, 28 ))
-      hamburgerButton.setToolTipText( Ref.word( 35 ) )
+      hamburgerButton.setToolTipText( Lang.word( 35 ) )
       hamburgerButton.addActionListener( this )
       hamburgerButton.setActionCommand( EventHandler.HAMBURGER )
 

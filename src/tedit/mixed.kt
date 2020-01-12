@@ -1,34 +1,43 @@
 package tedit
 
-import java.awt.event.MouseListener
-import java.awt.event.MouseEvent
-import javax.swing.SwingUtilities
 import javax.swing.JFileChooser
 import javax.swing.JOptionPane
-import javax.swing.event.TreeSelectionListener
-import javax.swing.event.TreeSelectionEvent
 import pen.Log
-import pen.par.KMember
 import pen.par.KRelation
 import pen.par.KMutableTender
+import apps.Constants.SLASH
+
+/** Sets the title according to file name and modification status. */
+fun updateTitle ()
+{
+   var title = Lang.word( 301 ) + " - "
+
+   with( Tabs.current )
+   {
+      title = title + filename.substring( filename.lastIndexOf( SLASH ) + 1 )
+
+      if (proposalTable.modified)
+         title = title + " *"
+   }
+
+   KTenderEdit.tenderEdit().setTitle( title )
+}
 
 /** Removes/clear the currently selected tab. */
 fun removeCurrentTab ()
 {
-   with (Ref)
+   if (Tabs.getTabCount() > 1)
    {
-      if (tabbedPane.getTabCount() > 1)
-      {
-         tabbedPane.remove( currentTab )
-         currentTab = tabbedPane.getSelectedComponent() as KTableTab
-         currentTab.updateTitle()
-      }
-      else
-      {
-         currentTab.table.vanilla()
-         currentTab.table.setup()
-         currentTab.updateTitle()
-      }
+      Tabs.remove( Tabs.current )
+      Tabs.current = Tabs.getSelectedComponent() as KTenderTab
+      updateTitle()
+   }
+   else
+   {
+      Tabs.current.proposalTable.vanilla()
+      Tabs.current.filename = Lang.word( 3 )
+      Tabs.current.proposalTable.setup()
+      updateTitle()
    }
 }
 
@@ -38,20 +47,20 @@ fun handleModifications () : Boolean
 {
    var modified = false
 
-   for (a in 0 until Ref.tabbedPane.getTabCount())
+   for (a in 0 until Tabs.getTabCount())
    {
-      val tabComponent = Ref.tabbedPane.getComponentAt( a )
-      if (tabComponent is KTableTab)
+      val tabComponent = Tabs.getComponentAt( a )
+      if (tabComponent is KTenderTab)
       {
-         val tableTab = tabComponent
-         modified = modified || tableTab.table.modified
+         val tenderTab = tabComponent
+         modified = modified || tenderTab.proposalTable.modified
       }
    }
    var procede = true
 
    if (modified == true)
-      procede = (JOptionPane.showConfirmDialog( Ref.pe(), Ref.word( 49 ) + "\n" + Ref.word( 24 ),
-      Ref.word( 34 ), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE ) == JOptionPane.YES_OPTION)
+      procede = (JOptionPane.showConfirmDialog( KTenderEdit.tenderEdit(), Lang.word( 49 ) + "\n" + Lang.word( 24 ),
+      Lang.word( 34 ), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE ) == JOptionPane.YES_OPTION)
 
    return procede
 }
@@ -62,7 +71,7 @@ fun openTender ()
    fileChooser.setDialogTitle( "Open" )
    fileChooser.setApproveButtonText( "Open" )
 
-   if (fileChooser.showOpenDialog( Ref.pe() ) == JFileChooser.APPROVE_OPTION)
+   if (fileChooser.showOpenDialog( KTenderEdit.tenderEdit() ) == JFileChooser.APPROVE_OPTION)
    {
       val selectedFile = fileChooser.getSelectedFile()
       val pathname = selectedFile.getAbsolutePath()
@@ -72,41 +81,39 @@ fun openTender ()
       {
          if (name.endsWith( ".tdr" ))
          {
-            val member = Ref.settings.currentUser().member
-            if (member is KMember)
+            val member = Ref.users().current.member
+            val relationSelector = KRelationSelector( member, KTenderEdit.tenderEdit() )
+            val rel = relationSelector.relation
+
+            if (rel is KRelation)
             {
-               val relationSelector = KRelationSelector( member, Ref.pe() )
-               val rel = relationSelector.relation
+               val tenderTab = KTenderTab(KMutableTender())
+               tenderTab.load( pathname )
+               (tenderTab.tender as KMutableTender).relation = rel
 
-               if (rel is KRelation)
-               {
-                  val tableTab = KTableTab(KMutableTender( relation = rel ))
-                  tableTab.loadTender( pathname )
+               Tabs.addTab( name, tenderTab )
+               Tabs.setSelectedComponent( tenderTab )
+               Tabs.current.proposalTable.setup()
 
-                  Ref.tabbedPane.addTab( name, tableTab )
-                  Ref.tabbedPane.setSelectedComponent( tableTab )
-                  Ref.currentTab.table.setup()
-
-                  tableTab.updateTitle()
-               }
-               else
-                  Log.warn( "Open proposal failed (no role selected)" )
+               updateTitle()
             }
+            else
+               Log.warn( "Open tender failed (no role selected)" )
          }
          else
-            Log.warn( "Open proposal failed (unspported file formet)" )
+            Log.warn( "Open tender failed (unspported file format)" )
       }
    }
 }
 
 fun saveTender ()
 {
-   val proposalEditor = Ref.pe()
+   val tenderEdit = KTenderEdit.tenderEdit()
    val fileChooser = Ref.fileChooser
    fileChooser.setDialogTitle( "Save" )
    fileChooser.setApproveButtonText( "Save" )
 
-   val result1 = fileChooser.showSaveDialog( proposalEditor )
+   val result1 = fileChooser.showSaveDialog( tenderEdit )
    if (result1 == JFileChooser.APPROVE_OPTION)
    {
       val selectedFile = fileChooser.getSelectedFile()
@@ -115,53 +122,32 @@ fun saveTender ()
 
       if (fileChooser.getSelectedFile().exists())
       {
-         val result2 = JOptionPane.showConfirmDialog(proposalEditor, " \"" + name + "\" " + Ref.word( 69 ) +
-         "!\n" + Ref.word( 72 ) + " ?", Ref.word( 34 ), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE )
+         val result2 = JOptionPane.showConfirmDialog(tenderEdit, " \"" + name + "\" " + Lang.word( 69 ) +
+         "!\n" + Lang.word( 72 ) + " ?", Lang.word( 34 ), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE )
          if (result2 == JOptionPane.YES_OPTION)
          {
-            Ref.currentTab.filename = pathname
-            if (Ref.currentTab.saveTender())
+            Tabs.current.filename = pathname
+            if (Tabs.current.save())
             {
-               Ref.currentTab.table.modified = false
-               Ref.tabbedPane.setTitleAt(Ref.tabbedPane.getSelectedIndex(), name)
-               Ref.currentTab.updateTitle()
+               Tabs.current.proposalTable.modified = false
+               Tabs.setTitleAt(Tabs.getSelectedIndex(), name)
+               updateTitle()
             }
             else
-               JOptionPane.showMessageDialog(proposalEditor, Ref.word( 73 ) + " " + name, Ref.word( 74 ), JOptionPane.ERROR_MESSAGE )
+               JOptionPane.showMessageDialog(tenderEdit, Lang.word( 73 ) + " " + name, Lang.word( 74 ), JOptionPane.ERROR_MESSAGE )
          }
       }
       else
       {
-         Ref.currentTab.filename = pathname
-         if (Ref.currentTab.saveTender())
+         Tabs.current.filename = pathname
+         if (Tabs.current.save())
          {
-            Ref.currentTab.table.modified = false
-            Ref.tabbedPane.setTitleAt(Ref.tabbedPane.getSelectedIndex(), name)
-            Ref.currentTab.updateTitle()
+            Tabs.current.proposalTable.modified = false
+            Tabs.setTitleAt(Tabs.getSelectedIndex(), name)
+            updateTitle()
          }
          else
-            JOptionPane.showMessageDialog(proposalEditor, Ref.word( 73 ) + " " + pathname, Ref.word( 74 ), JOptionPane.ERROR_MESSAGE )
+            JOptionPane.showMessageDialog(tenderEdit, Lang.word( 73 ) + " " + pathname, Lang.word( 74 ), JOptionPane.ERROR_MESSAGE )
       }
    }
 }
-
-class KTreeSelectionHandler : TreeSelectionListener
-{
-   override fun valueChanged (e : TreeSelectionEvent)
-   { EventHandler.handle( EventHandler.TREE_SELECTION ) }
-}
-
-class KMouseHandler : MouseListener
-{
-   override fun mouseClicked (e : MouseEvent)
-   {
-      if (SwingUtilities.isLeftMouseButton( e ) && e.getClickCount() == 2)
-         EventHandler.handle( EventHandler.ADD )
-   }
-
-   override fun mouseEntered (e : MouseEvent) {}
-   override fun mouseExited (e : MouseEvent) {}
-   override fun mousePressed (e : MouseEvent) {}
-   override fun mouseReleased (e : MouseEvent) {}
-}
-

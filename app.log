@@ -1,3 +1,11 @@
 
-2020-01-08 06:09:48 ERROR: reading object failed! (dist/tedit.json)
-2020-01-08 06:09:48 WARN: Conf-file load failed!
+2020-01-12 05:47:44 INFO: Welcome to Tender Edit!
+2020-01-12 05:47:44 DEBUG: Reading object file "dist/settings.json"
+2020-01-12 05:47:45 DEBUG: Loading English dictionary
+2020-01-12 05:47:45 DEBUG: Reading object file "dist/users.json"
+2020-01-12 05:47:46 DEBUG: Loading product page "users/Alice/2020:1/index.html"
+2020-01-12 05:47:56 DEBUG: Reading object file "/home/projects/tedit/tedit-0.0.1.05/test.tdr"
+2020-01-12 05:47:56 DEBUG: Parsing XML file "users/Alice/2020:1/consumption.xml"
+2020-01-12 05:48:00 DEBUG: Loading product page "users/Alice/productinfo/150131700.html"
+2020-01-12 05:48:00 DEBUG: Loading product page "users/Alice/productinfo/150131700.html"
+2020-01-12 05:48:08 DEBUG: Writing object

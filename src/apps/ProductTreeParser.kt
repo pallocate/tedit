@@ -37,8 +37,7 @@ object ProductTreeParser
                   val dmtn : DefaultMutableTreeNode = DefaultMutableTreeNode()
                   var product = KProductInfo( attr.getValue( "id" ).orEmpty(), attr.getValue( "name" ).orEmpty(),
                   attr.getValue( "desc" ).orEmpty(), attr.getValue( "amount" ).orEmpty(), attr.getValue( "prefix" ).orEmpty(),
-                  attr.getValue( "unit" ).orEmpty(), attr.getValue( "down" ).orEmpty(), attr.getValue( "up" ).orEmpty(),
-                  attr.getValue( "absolute" ).orEmpty(), attr.getValue( "price" ).orEmpty(),
+                  attr.getValue( "unit" ).orEmpty(), attr.getValue( "change" ).orEmpty(), attr.getValue( "price" ).orEmpty(),
                   attr.getValue( "sensetive" ).orEmpty(), attr.getValue( "analogue" ).orEmpty() )
 
                   dmtn.setUserObject( product )

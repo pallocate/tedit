@@ -5,34 +5,43 @@ import java.awt.BorderLayout
 import java.awt.event.WindowListener
 import java.awt.event.WindowEvent
 import javax.swing.JFrame
-import javax.swing.JOptionPane
 import javax.swing.JScrollPane
 import javax.swing.WindowConstants
 import javax.swing.JSplitPane
-import javax.swing.event.ChangeListener
-import javax.swing.event.ChangeEvent
 import javax.swing.filechooser.FileNameExtensionFilter
-import pen.par.KMember
 import pen.par.KMutableTender
-import pen.eco.Target
 import apps.Constants
 import pen.Constants.SLASH
 
-interface ProposalEditor
-class NoProposalEditor : ProposalEditor
-/** Creates the content, and contains references to some key components. */
-class KProposalEditor () : JFrame(), ProposalEditor, WindowListener, ChangeListener
+interface TenderEdit
+class NoTenderEdit : TenderEdit
+
+/** The main frame/GUI of the app. */
+class KTenderEdit () : JFrame(), TenderEdit, WindowListener
 {
+   companion object
+   {
+      private var _tenderEdit : TenderEdit = NoTenderEdit()
+      /** Returns a KTenderEdit, creating it if does not yet exist. */
+      fun tenderEdit () : KTenderEdit =   if (_tenderEdit is KTenderEdit)
+                                             _tenderEdit as KTenderEdit
+                                          else
+                                          {
+                                             _tenderEdit = KTenderEdit()
+                                             _tenderEdit as KTenderEdit
+                                          }
+   }
+
    init
    {
       val contentPane = getContentPane()
-      val progressPath = Constants.USERS_DIR + SLASH + Ref.settings.currentUser().member.me.name + SLASH + Ref.settings.progress
+      val progressPath = Constants.USERS_DIR + SLASH + Ref.users().current.member.me.name + SLASH + Ref.settings.progress
 
-      /** Split panes */
+      /* Split panes */
       val topSplitPane = JSplitPane().apply {
          setDividerSize( 6 )
          setDividerLocation( 450 )
-         setLeftComponent( Ref.tabbedPane )
+         setLeftComponent( Tabs )
          setRightComponent( Ref.summary )
       }
 
@@ -43,7 +52,7 @@ class KProposalEditor () : JFrame(), ProposalEditor, WindowListener, ChangeListe
          setRightComponent( topSplitPane )
       }
 
-      /** Other stuff */
+      /* Other stuff */
       Ref.summary.load( "${progressPath}${SLASH}index.html" )
       setJMenuBar( KMenu() )
       contentPane.add(Ref.statusBar, BorderLayout.SOUTH)
@@ -53,10 +62,10 @@ class KProposalEditor () : JFrame(), ProposalEditor, WindowListener, ChangeListe
          setAcceptAllFileFilterUsed( true )
       }
 
-      Ref.tabbedPane.addChangeListener( this )
-      setTitle( Ref.word( 301 ) + " - " + Ref.word( 3 ) )
+      Tabs.addChangeListener( Tabs )
+      setTitle( Lang.word( 301 ) + " - " + Lang.word( 3 ) )
 
-      /** Toolbar */
+      /* Toolbar */
       if (Ref.settings.toolbar)
          contentPane.add(KToolbar( Ref.hamburgerMenu.hamburgerButton ), BorderLayout.NORTH)
 
@@ -66,31 +75,6 @@ class KProposalEditor () : JFrame(), ProposalEditor, WindowListener, ChangeListe
       setSize( Dimension( 1360, 768 ) )
       setDefaultCloseOperation( WindowConstants.DO_NOTHING_ON_CLOSE )
       setVisible( true )
-   }
-
-   /** Responds to tab selection changes. Sets Ref.currentTab and application title accordingly. */
-   override fun stateChanged (e : ChangeEvent)
-   {
-      val selectedTab = Ref.tabbedPane.getSelectedComponent()
-      if (selectedTab is KTableTab)
-      {
-         val member = Ref.settings.currentUser().member
-         if (member is KMember)
-         {
-            val tender = selectedTab.tender
-            if (tender is KMutableTender)
-            {
-               val target = tender.relation.target
-               if (target != Target.UNDEFINED)
-               {
-                  val progressPath = Constants.USERS_DIR + SLASH + member.me.name + SLASH + Ref.settings.progress
-                  Ref.productTree.load( progressPath + SLASH + target.name.toLowerCase() + ".xml" )
-               }
-            }
-         }
-         Ref.currentTab = selectedTab
-         Ref.currentTab.updateTitle()
-      }
    }
 
    override fun windowClosing (e : WindowEvent)

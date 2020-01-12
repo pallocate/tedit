@@ -5,7 +5,6 @@ import java.awt.Dimension
 import java.awt.Frame
 import java.awt.GridLayout
 import java.awt.BorderLayout
-import java.awt.FlowLayout
 import java.awt.event.ActionListener
 import java.awt.event.ActionEvent
 import javax.swing.*
@@ -16,11 +15,11 @@ import pen.par.NoRelation
 import pen.par.KRelation
 import apps.Constants
 
-class KRelationSelector (val member : KMember, frame : Frame) : JDialog( frame, Ref.word( 206 ), true ), ActionListener
+class KRelationSelector (val member : KMember, frame : Frame) : JDialog( frame, Lang.word( 206 ), true ), ActionListener
 {
    var relation : Relation                             = NoRelation()
 
-   private val okButton                                = JButton(Ref.word( 10 ))
+   private val okButton                                = JButton(Lang.word( 10 ))
    private val comboBox                                = JComboBox<KRelation>()
 
    private val OK                                      = "OK"

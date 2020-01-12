@@ -33,41 +33,38 @@ object EventHandler
    val TREE_SELECTION                          = "TREE_SELECTION"
    val ADD                                     = "ADD"
    val REMOVE                                  = "REMOVE"
-   val TENDER                                  = "TENDER"
+   val SUBMIT                                  = "SUBMIT"
    val SAVE_SETTINGS                           = "SAVE_SETTINGS"
    val GET_UPDATES                             = "GET_UPDATES"
    val ACCOUNT_EDIT                            = "ACCOUNT_EDIT"
 
-   private val chkBox                          = JCheckBox(Ref.word( 242 ))
+   private val chkBox                          = JCheckBox(Lang.word( 242 ))
 
    /** Handles events.
     * @param event What event to handle. */
    fun handle (event : String)
    {
-      val proposalEditor = Ref.pe()
+      val tenderEdit = KTenderEdit.tenderEdit()
 
       when (event)
       {
          NEW ->
          {
-            val member = Ref.settings.currentUser().member
-            if (member is KMember)
+            val member = Ref.users().current.member
+            val relationSelector = KRelationSelector( member, tenderEdit )
+            val rel = relationSelector.relation
+
+            if (rel is KRelation)
             {
-               val relationSelector = KRelationSelector( member, proposalEditor )
-               val rel = relationSelector.relation
+               val tenderTab = KTenderTab(KMutableTender( relation = rel ))
 
-               if (rel is KRelation)
-               {
-                  val tableTab = KTableTab(KMutableTender( relation = rel ))
+               Tabs.addTab(Lang.word( 3 ), tenderTab)
+               Tabs.setSelectedComponent( tenderTab )
 
-                  Ref.tabbedPane.addTab(Ref.word( 3 ), tableTab)
-                  Ref.tabbedPane.setSelectedComponent( tableTab )
+               tenderTab.proposalTable.setup()
+               updateTitle()
 
-                  tableTab.table.setup()
-                  tableTab.updateTitle()
-
-                  Ref.currentTab = tableTab
-               }
+               Tabs.current = tenderTab
             }
          }
 
@@ -75,12 +72,12 @@ object EventHandler
             openTender()
 
          SAVE ->
-            if (Ref.currentTab.table.modified == true && Ref.currentTab.filename != Ref.word( 3 ))
+            if (Tabs.current.proposalTable.modified == true && Tabs.current.filename != Lang.word( 3 ))
             {
-               if (Ref.currentTab.saveTender())
+               if (Tabs.current.save())
                {
-                  Ref.currentTab.table.modified = false
-                  Ref.currentTab.updateTitle()
+                  Tabs.current.proposalTable.modified = false
+                  updateTitle()
                }
                else
                   saveTender()
@@ -93,34 +90,37 @@ object EventHandler
             saveTender()
 
          CLOSE ->
-            if (Ref.currentTab.table.modified == false)
+            if (Tabs.current.proposalTable.modified == false)
                removeCurrentTab()
             else
-               if (JOptionPane.showConfirmDialog(proposalEditor, Ref.word( 49 ) + "\n" + Ref.word( 24 ),
-               Ref.word( 34 ), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE ) == JOptionPane.YES_OPTION)
+               if (JOptionPane.showConfirmDialog(tenderEdit, Lang.word( 49 ) + "\n" + Lang.word( 24 ),
+               Lang.word( 34 ), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE ) == JOptionPane.YES_OPTION)
                   removeCurrentTab()
 
          SELECT_USER ->
             {}
 
          SAVE_SETTINGS ->
+         {
             Ref.settings.save()
+            Ref.users().save()
+         }
 
          GET_UPDATES ->
             println( GET_UPDATES )
 
-         TENDER ->
+         SUBMIT ->
          {
             val passwordPopup = KPasswordPopup( true )
-            val member = Ref.settings.currentUser().member
+            val member = Ref.users().current.member
 
-            Ref.currentTab.apply {
-               if (table.modified == false)
-                  submitTender( member.me, passwordPopup )
+            Tabs.current.apply {
+               if (proposalTable.modified == false)
+                  submit( member.me, passwordPopup )
                else
-                  if (JOptionPane.showConfirmDialog(proposalEditor, Ref.word( 49 ) + "\n" + Ref.word( 24 ),
-                  Ref.word( 34 ), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE ) == JOptionPane.YES_OPTION)
-                     submitTender( member.me, passwordPopup )
+                  if (JOptionPane.showConfirmDialog(tenderEdit, Lang.word( 49 ) + "\n" + Lang.word( 24 ),
+                  Lang.word( 34 ), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE ) == JOptionPane.YES_OPTION)
+                     submit( member.me, passwordPopup )
             }
          }
 
@@ -128,16 +128,16 @@ object EventHandler
          {
             if (handleModifications())
             {
-               proposalEditor.setVisible( false )
-               proposalEditor.dispose()
+               tenderEdit.setVisible( false )
+               tenderEdit.dispose()
             }
          }
 
          SEARCH ->
          {
             val productTree = Ref.productTree
-            val term = JOptionPane.showInputDialog(proposalEditor, arrayOf(JLabel(Ref.word( 20 ) + ": " + Ref.word( 208 )),
-                  chkBox), Ref.word( 20 ), JOptionPane.QUESTION_MESSAGE )
+            val term = JOptionPane.showInputDialog(tenderEdit, arrayOf(JLabel(Lang.word( 20 ) + ": " + Lang.word( 208 )),
+                  chkBox), Lang.word( 20 ), JOptionPane.QUESTION_MESSAGE )
 
             if (term != null && term != "")
             {
@@ -161,24 +161,24 @@ object EventHandler
          }
 
          ADD ->
-            if (Ref.currentTab.table.add())
+            if (Tabs.current.proposalTable.add())
             {
-               Ref.currentTab.table.modified = true
-               Ref.currentTab.updateTitle()
+               Tabs.current.proposalTable.modified = true
+               updateTitle()
             }
 
          REMOVE ->
-            if (Ref.currentTab.table.remove())
+            if (Tabs.current.proposalTable.remove())
             {
-               Ref.currentTab.table.modified = true
-               Ref.currentTab.updateTitle()
+               Tabs.current.proposalTable.modified = true
+               updateTitle()
             }
 
          CLEAR ->
          {
-            with (Ref.currentTab) {
-               table.vanilla( true )
-               table.setup()
+            with (Tabs.current) {
+               proposalTable.vanilla()
+               proposalTable.setup()
                updateTitle()
             }
             Ref.productTree.resetSearch()
@@ -188,7 +188,7 @@ object EventHandler
             Ref.summary.load( Constants.RESOURCES_DIR + SLASH + "help.html" )
 
          ABOUT ->
-            JOptionPane.showMessageDialog( proposalEditor, Ref.word( 301 ), "information", JOptionPane.INFORMATION_MESSAGE )
+            JOptionPane.showMessageDialog( tenderEdit, Lang.word( 301 ), "information", JOptionPane.INFORMATION_MESSAGE )
 
          TREE_SELECTION ->
          {
@@ -196,7 +196,7 @@ object EventHandler
 
             dmt?.run {
                val selectedObject = (dmt as DefaultMutableTreeNode).getUserObject() as KProductInfo
-               val productInfoPath = "${Constants.USERS_DIR}${SLASH}${Ref.settings.currentUser().member.me.name}${SLASH}productinfo"
+               val productInfoPath = "${Constants.USERS_DIR}${SLASH}${Ref.users().current.member.me.name}${SLASH}productinfo"
                Ref.summary.load( "${productInfoPath}${SLASH}${selectedObject.id}.html" )
             }
          }

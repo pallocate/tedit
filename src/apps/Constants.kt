@@ -13,7 +13,7 @@ object Constants
    /** Directory where application icons are stored. */
    val ICONS_DIR                                  = pen.Constants.ICONS_DIR
 
-   /** Directory where proposals are stored. */
+   /** Directory where tenders are stored. */
    val USERS_DIR                                  = "users"
    /** Directory where product information files are stored. */
    val PRODUCTS_DIR                               = "products"

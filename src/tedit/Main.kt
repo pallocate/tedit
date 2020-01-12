@@ -1,6 +1,5 @@
 package tedit
 
-import java.io.File
 import pen.Log
 import pen.LogLevel
 import pen.Constants
@@ -9,7 +8,8 @@ import pen.readObject
 /** The main class. */
 object Main
 {
-   val CONFIG_FILE = "dist${Constants.SLASH}tedit.json"
+   val USERS_FILE = "dist${Constants.SLASH}users.json"
+   val SETTINGS_FILE = "dist${Constants.SLASH}settings.json"
 
    @JvmStatic
    fun main (args : Array<String>)
@@ -17,19 +17,19 @@ object Main
       if (args.size > 0)
          when (args[0])
          {
-            "-d" ->
+            "-d" ->  // Debug
             {
                Log.level = LogLevel.DEBUG
                start()
             }
 
-            "-q" ->
+            "-q" ->  // Quiet
             {
                Log.level = LogLevel.QUIET
                start()
             }
 
-            else ->
+            else ->  // Print usage
             {
                println( "tedit" )
                println( "tedit -d         Debug" )
@@ -38,7 +38,7 @@ object Main
             }
          }
       else
-         start()
+          start()
    }
 
    fun start ()
@@ -47,19 +47,50 @@ object Main
 
       try
       {
-         val obj = readObject<KSettings>( {KSettings.serializer()}, CONFIG_FILE )
-         if (obj is KSettings)
-            Ref.settings = obj
+         /* Tries to read settings. */
+         val settingsObject = readObject<KSettings>( {KSettings.serializer()}, SETTINGS_FILE )
+         if (settingsObject is KSettings)
+            Ref.settings = settingsObject
          else
             Ref.settings = KSettings()
 
-         Ref.pe()
+         /* Tries to read users. */
+         val usersObject = readObject<KUsers>( {KUsers.serializer()}, USERS_FILE )
+         if (usersObject is KUsers)
+         {
+            Ref.setUsers( usersObject )
+
+            if (Ref.users().userMap.isEmpty())
+               throw Exception( "no users found" )
+            else
+            {
+               if (Ref.settings.defaultUser <= 0L)                              // If no default user has been set,
+                  Ref.settings.defaultUser = Ref.users().userMap[0]!!.member.me.contactId // the first user will be used
+            }
+
+            Ref.users().activate( Ref.settings.defaultUser )
+         }
+         else
+            testMode()
+
+         /* Calls KTenderEdit to create the GUI. */
+         KTenderEdit.tenderEdit()
       }
       catch (e : Exception)
       {
-         Log.critical( "Unexpected exception, " + e.message )
-         Log.critical( "Quiting.." )
+         Log.critical( "Critical exception, (${e.message})" )
          kotlin.system.exitProcess( 1 )
       }
+   }
+
+
+   fun testMode ()
+   {
+      val users = KUsers()
+      users.testMode()
+      Ref.settings.defaultUser = 3L
+
+      Ref.setUsers( users )
+      Ref.users().activate( Ref.settings.defaultUser )
    }
 }

@@ -17,17 +17,17 @@ class KHamburgerMenu () : JPopupMenu(), ActionListener
 
    init
    {
-      var menuItem : JMenuItem = JMenuItem(Ref.word( 303 ), ImageIcon( "${Constants.ICONS_DIR}${Constants.SLASH}preferences-system.png" ))
+      var menuItem : JMenuItem = JMenuItem(Lang.word( 303 ), ImageIcon( "${Constants.ICONS_DIR}${Constants.SLASH}preferences-system.png" ))
       menuItem.addActionListener( this )
       menuItem.setActionCommand( EventHandler.SAVE_SETTINGS )
       add( menuItem );
 
-      menuItem = JMenuItem(Ref.word( 27 ), ImageIcon( "${Constants.ICONS_DIR}${Constants.SLASH}emblem-downloads.png" ))
+      menuItem = JMenuItem(Lang.word( 27 ), ImageIcon( "${Constants.ICONS_DIR}${Constants.SLASH}emblem-downloads.png" ))
       menuItem.setEnabled( false )
       menuItem.setActionCommand( EventHandler.GET_UPDATES )
       add( menuItem );
 
-      menuItem = JMenuItem( Ref.word( 331 ), ImageIcon( "${Constants.ICONS_DIR}${Constants.SLASH}accessories-text-editor.png" ))
+      menuItem = JMenuItem( Lang.word( 331 ), ImageIcon( "${Constants.ICONS_DIR}${Constants.SLASH}accessories-text-editor.png" ))
       menuItem.setEnabled( false )
       menuItem.setActionCommand( EventHandler.ACCOUNT_EDIT )
       add( menuItem )
