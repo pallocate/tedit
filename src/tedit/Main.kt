@@ -41,7 +41,7 @@ object Main
           start()
    }
 
-   fun start ()
+   private fun start ()
    {
       Log.info( "Welcome to Tender Edit!" )
 
@@ -64,11 +64,11 @@ object Main
                throw Exception( "no users found" )
             else
             {
-               if (Ref.settings.defaultUser <= 0L)                              // If no default user has been set,
-                  Ref.settings.defaultUser = Ref.users().userMap[0]!!.member.me.contactId // the first user will be used
+               if (Ref.settings.defaultUser > 0L)
+                  Ref.users().activate( Ref.settings.defaultUser )
+               else
+                  Ref.users().activate( Ref.users().userMap[0]!! )
             }
-
-            Ref.users().activate( Ref.settings.defaultUser )
          }
          else
             testMode()
@@ -84,7 +84,7 @@ object Main
    }
 
 
-   fun testMode ()
+   private fun testMode ()
    {
       val users = KUsers()
       users.testMode()

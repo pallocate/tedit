@@ -12,6 +12,9 @@ object Tabs : JTabbedPane(), ChangeListener
 {
    var current = KTenderTab()
 
+   init
+   {addChangeListener( this )}
+
    /** Responds to tab selection changes. Sets current tab, and application title accordingly. */
    override fun stateChanged (e : ChangeEvent)
    {

@@ -24,7 +24,7 @@ fun updateTitle ()
 }
 
 /** Removes/clear the currently selected tab. */
-fun removeCurrentTab ()
+fun closeTab ()
 {
    if (Tabs.getTabCount() > 1)
    {
@@ -81,19 +81,18 @@ fun openTender ()
       {
          if (name.endsWith( ".tdr" ))
          {
-            val member = Ref.users().current.member
-            val relationSelector = KRelationSelector( member, KTenderEdit.tenderEdit() )
-            val rel = relationSelector.relation
+            val relationSelector = KRelationSelector( KTenderEdit.tenderEdit() )
+            val rel = relationSelector.selectedRelation
 
             if (rel is KRelation)
             {
-               val tenderTab = KTenderTab(KMutableTender())
+               val tenderTab = KTenderTab()
                tenderTab.load( pathname )
                (tenderTab.tender as KMutableTender).relation = rel
 
                Tabs.addTab( name, tenderTab )
                Tabs.setSelectedComponent( tenderTab )
-               Tabs.current.proposalTable.setup()
+               tenderTab.proposalTable.setup()
 
                updateTitle()
             }

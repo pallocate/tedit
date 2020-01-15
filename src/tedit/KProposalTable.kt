@@ -18,6 +18,7 @@ import pen.eco.KMutableProduct
 import pen.eco.KProductInfo
 import pen.eco.KQuantableProductInfo
 import pen.eco.KMutableHeader
+import pen.par.Tender
 import apps.Utils
 import apps.Constants.USERS_DIR
 import pen.Constants.SLASH
@@ -25,9 +26,10 @@ import pen.Constants.SLASH
 /** A table for showing products and edit quantities. */
 class KProposalTable () : JTable()
 {
-   var proposal                                 = KMutableProposal()
-   var model : CustomTableModel?                = null
    var modified                                 = false
+   var proposal                                 = KMutableProposal()
+      private set
+   private var model : CustomTableModel?        = null
    private var isChanging                       = false                         // To mitigate effects of unwanted selection events.
    private var selectedProductNum               = -1
 
@@ -45,7 +47,13 @@ class KProposalTable () : JTable()
       setSelectionModel( listSelectionModel )
    }
 
-   /** Resets the table using info from tender. */
+   fun updateFromTender (tender : Tender)
+   {
+      if (tender.proposal is KMutableProposal)
+         proposal = tender.proposal as KMutableProposal
+   }
+
+   /** Resets the table using info from proposal. */
    fun setup ()
    {
       isChanging = true
@@ -182,7 +190,7 @@ class KProposalTable () : JTable()
       return ret
    }
 
-   /** Makes the table largely uneditable. */
+   /** Makes the table uneditable except for product quantity. */
    inner class CustomTableModel (data : Vector<Vector<Object>>, columnNames : Vector<Object>) : DefaultTableModel (data, columnNames)
    {
       override fun isCellEditable (i1 : Int, i2 : Int) : Boolean
@@ -222,7 +230,7 @@ class KProposalTable () : JTable()
       }
    }
 
-   /** Handles selection events to the table.
+   /** Handles selection events in the table.
      * @note Could´nt be done in EventHandler due to threading issues. */
    inner class ListSelectionHandler () : ListSelectionListener
    {

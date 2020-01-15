@@ -34,7 +34,7 @@ object Lang
 {
    private val DEFAULT_LANGUGE = "English"
    private var currentDictionary = Dictionary( DEFAULT_LANGUGE )
-   var dictionaries = HashMap<String,Dictionary>().apply {
+   private var dictionaries = HashMap<String,Dictionary>().apply {
       put( DEFAULT_LANGUGE, currentDictionary )
    }
 

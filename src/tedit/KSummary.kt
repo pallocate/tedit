@@ -15,7 +15,8 @@ class KSummary () : JEditorPane(), HyperlinkListener
       setEditorKit(JEditorPane.createEditorKitForContentType( "text/html" ))
       setEditable( false )
       addHyperlinkListener( this )
-   }
+
+  }
 
    /** Loads file into summary pane.
      * @return True if successful */

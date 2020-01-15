@@ -7,12 +7,17 @@ import pen.Log
 import pen.writeObject
 import pen.par.KMember
 
+interface User
+class NoUser : User
+
 /** A basic user of an application. */
 @Serializable
-class KUser
+class KUser : User
 {
    var language                                        = "English"
    var member                                          = KMember()
+
+   override fun toString () = "${member.me.name}"
 }
 
 interface Users
@@ -22,7 +27,7 @@ class NoUsers : Users
 class KUsers () : Users
 {
    @SerialName( "users" )
-   private var userArray : Array<KUser>                = Array<KUser>( 0, {KUser()} )
+   var userArray : Array<KUser>                        = Array<KUser>( 0, {KUser()} )
    @Transient
    val userMap                                         = HashMap<Long,KUser>()
    @Transient
@@ -38,19 +43,24 @@ class KUsers () : Users
       {
          val user = userMap.get( userId )
          if (user != null)
-         {
-            current = user
-            Lang.setLanguage( user.language )
-         }
+            activate( user )
       }
       else
          Log.error( "Bad user id: $userId" )
    }
 
+   /** Activates a user (sets as current and sets language) */
+   fun activate (user : KUser)
+   {
+      if (user is KUser)
+      {
+         current = user
+         Lang.setLanguage( user.language )
+      }
+   }
+
    /** Saves users to file.*/
    fun save () = writeObject<KUsers>( this, {KUsers.serializer()}, Main.USERS_FILE )
-
-
 
    fun testMode ()
    {

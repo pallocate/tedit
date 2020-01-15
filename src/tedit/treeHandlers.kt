@@ -6,12 +6,14 @@ import javax.swing.event.TreeSelectionListener
 import javax.swing.event.TreeSelectionEvent
 import javax.swing.SwingUtilities
 
+/** Handles selections in the product tree. */
 class KTreeSelectionHandler : TreeSelectionListener
 {
    override fun valueChanged (e : TreeSelectionEvent)
    { EventHandler.handle( EventHandler.TREE_SELECTION ) }
 }
 
+/** Handles mouseclicks in the product tree. */
 class KMouseHandler : MouseListener
 {
    override fun mouseClicked (e : MouseEvent)

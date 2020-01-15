@@ -111,8 +111,9 @@ class KMenu () : JMenuBar(), ActionListener
       val ret = JMenu(Lang.word( 21 ))
       var menuItem : JMenuItem
 
-      menuItem = JMenuItem(Lang.word( 205 ))
-      menuItem.setActionCommand( EventHandler.SELECT_USER )
+      menuItem = JMenuItem(Lang.word( 330 ))
+      menuItem.addActionListener( this )
+      menuItem.setActionCommand( EventHandler.ECONOMIC_RELATIONS )
       ret.add( menuItem )
 
       menuItem = JMenuItem(Lang.word( 27 ))

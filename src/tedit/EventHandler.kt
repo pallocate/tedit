@@ -9,7 +9,6 @@ import pen.par.KMember
 import pen.par.KMutableTender
 import pen.par.KRelation
 import pen.eco.KProductInfo
-import apps.KPasswordPopup
 import apps.Constants
 import pen.Constants.SLASH
 
@@ -29,7 +28,7 @@ object EventHandler
    val HELP                                    = "HELP"
    val ABOUT                                   = "ABOUT"
    val HAMBURGER                               = "HAMBURGER"
-   val SELECT_USER                             = "SELECT_USER"
+   val ECONOMIC_RELATIONS                      = "ECONOMIC_RELATIONS"
    val TREE_SELECTION                          = "TREE_SELECTION"
    val ADD                                     = "ADD"
    val REMOVE                                  = "REMOVE"
@@ -50,9 +49,8 @@ object EventHandler
       {
          NEW ->
          {
-            val member = Ref.users().current.member
-            val relationSelector = KRelationSelector( member, tenderEdit )
-            val rel = relationSelector.relation
+            val relationSelector = KRelationSelector( tenderEdit )
+            val rel = relationSelector.selectedRelation
 
             if (rel is KRelation)
             {
@@ -60,11 +58,9 @@ object EventHandler
 
                Tabs.addTab(Lang.word( 3 ), tenderTab)
                Tabs.setSelectedComponent( tenderTab )
-
                tenderTab.proposalTable.setup()
-               updateTitle()
 
-               Tabs.current = tenderTab
+               updateTitle()
             }
          }
 
@@ -91,14 +87,16 @@ object EventHandler
 
          CLOSE ->
             if (Tabs.current.proposalTable.modified == false)
-               removeCurrentTab()
+               closeTab()
             else
                if (JOptionPane.showConfirmDialog(tenderEdit, Lang.word( 49 ) + "\n" + Lang.word( 24 ),
                Lang.word( 34 ), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE ) == JOptionPane.YES_OPTION)
-                  removeCurrentTab()
+                  closeTab()
 
-         SELECT_USER ->
-            {}
+         ECONOMIC_RELATIONS ->
+         {
+            val relationSelector = KRelationSelector( tenderEdit )
+         }
 
          SAVE_SETTINGS ->
          {
@@ -111,16 +109,13 @@ object EventHandler
 
          SUBMIT ->
          {
-            val passwordPopup = KPasswordPopup( true )
-            val member = Ref.users().current.member
-
             Tabs.current.apply {
                if (proposalTable.modified == false)
-                  submit( member.me, passwordPopup )
+                  submit()
                else
                   if (JOptionPane.showConfirmDialog(tenderEdit, Lang.word( 49 ) + "\n" + Lang.word( 24 ),
                   Lang.word( 34 ), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE ) == JOptionPane.YES_OPTION)
-                     submit( member.me, passwordPopup )
+                     submit()
             }
          }
 

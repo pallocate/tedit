@@ -8,7 +8,6 @@ import javax.swing.JFrame
 import javax.swing.JScrollPane
 import javax.swing.WindowConstants
 import javax.swing.JSplitPane
-import javax.swing.filechooser.FileNameExtensionFilter
 import pen.par.KMutableTender
 import apps.Constants
 import pen.Constants.SLASH
@@ -34,46 +33,34 @@ class KTenderEdit () : JFrame(), TenderEdit, WindowListener
 
    init
    {
-      val contentPane = getContentPane()
-      val progressPath = Constants.USERS_DIR + SLASH + Ref.users().current.member.me.name + SLASH + Ref.settings.progress
-
-      /* Split panes */
-      val topSplitPane = JSplitPane().apply {
-         setDividerSize( 6 )
-         setDividerLocation( 450 )
-         setLeftComponent( Tabs )
-         setRightComponent( Ref.summary )
-      }
-
       val splitpane = JSplitPane().apply {
          setDividerSize( 4 )
          setDividerLocation( 275 )
          setLeftComponent(JScrollPane( Ref.productTree ))
-         setRightComponent( topSplitPane )
+         setRightComponent( JSplitPane().apply {
+            setDividerSize( 6 )
+            setDividerLocation( 450 )
+            setLeftComponent( Tabs )
+            setRightComponent( Ref.summary )
+         })
       }
 
-      /* Other stuff */
-      Ref.summary.load( "${progressPath}${SLASH}index.html" )
+      with( getContentPane() ) {
+         if (Ref.settings.toolbar)
+            add(KToolbar( Ref.hamburgerMenu.hamburgerButton ), BorderLayout.NORTH)
+
+         add( splitpane, BorderLayout.CENTER )
+         add(Ref.statusBar, BorderLayout.SOUTH)
+      }
+
+      val START_PAGE = Constants.USERS_DIR + SLASH + Ref.users().current.member.me.name + SLASH + Ref.settings.progress + SLASH + "index.html"
+      Ref.summary.load( START_PAGE )
       setJMenuBar( KMenu() )
-      contentPane.add(Ref.statusBar, BorderLayout.SOUTH)
-      with( Ref.fileChooser ) {
-         resetChoosableFileFilters()
-         setFileFilter(FileNameExtensionFilter( "Economic tender", "tdr" ))
-         setAcceptAllFileFilterUsed( true )
-      }
 
-      Tabs.addChangeListener( Tabs )
       setTitle( Lang.word( 301 ) + " - " + Lang.word( 3 ) )
-
-      /* Toolbar */
-      if (Ref.settings.toolbar)
-         contentPane.add(KToolbar( Ref.hamburgerMenu.hamburgerButton ), BorderLayout.NORTH)
-
-      contentPane.add( splitpane, BorderLayout.CENTER )
-      addWindowListener( this )
-
       setSize( Dimension( 1360, 768 ) )
       setDefaultCloseOperation( WindowConstants.DO_NOTHING_ON_CLOSE )
+      addWindowListener( this )
       setVisible( true )
    }
 
