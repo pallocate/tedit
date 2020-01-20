@@ -46,7 +46,7 @@ class KTenderTab (tender : Tender = NoTender()) : JScrollPane()
    fun submit ()
    {
       val passwordPopup = KPasswordPopup( true )
-      val me = Ref.users().current.member.me
+      val me = KUsers.instance.current.member.me
 
       if (tender is KMutableTender)
          (tender as KMutableTender).toKTender().submit( me, passwordPopup )

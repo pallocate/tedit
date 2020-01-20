@@ -65,7 +65,7 @@ class KProposalTable () : JTable()
          add( Lang.word( 48 ) as Object )
       }
 
-      model = CustomTableModel(Utils.vectorize( proposal.products, Ref.productTree ), columnNames)
+      model = CustomTableModel(Utils.vectorize( proposal.products, GUI.productTree ), columnNames)
       setModel( model )
       model?.addTableModelListener( TableModelHandler() )
 
@@ -102,9 +102,9 @@ class KProposalTable () : JTable()
    fun add () : Boolean
    {
       var success = false
-      val node = Ref.productTree.getLastSelectedPathComponent()
+      val node = GUI.productTree.getLastSelectedPathComponent()
 
-      if (node != null && Ref.productTree.isAChoosableProduct( node as TreeNode ))
+      if (node != null && GUI.productTree.isAChoosableProduct( node as TreeNode ))
       {
          val newProduct = KMutableProduct()
          val newProductInfo = ((node as DefaultMutableTreeNode).getUserObject() as KProductInfo)
@@ -181,7 +181,7 @@ class KProposalTable () : JTable()
       {
          val product = proposal.products.getOrNull( realRowIndex )
          product?.let {
-            val productInfo = Ref.productTree.productInfo( it )
+            val productInfo = GUI.productTree.productInfo( it )
 
             if (productInfo is KQuantableProductInfo)
                ret = productInfo.desc
@@ -238,9 +238,9 @@ class KProposalTable () : JTable()
       {
          if (!isChanging && !proposal.products.isEmpty())
          {
-            val productInfoPath = "${USERS_DIR}${SLASH}${Ref.users().current.member.me.name}${SLASH}productinfo"
+            val productInfoPath = "${USERS_DIR}${SLASH}${KUsers.instance.current.member.me.name}${SLASH}productinfo"
             selectedProductNum = (e.getSource() as DefaultListSelectionModel).getLeadSelectionIndex()
-            Ref.summary.load( "${productInfoPath}${SLASH}${getValueAt(selectedProductNum, 0)}.html" )
+            GUI.summary.load( "${productInfoPath}${SLASH}${getValueAt(selectedProductNum, 0)}.html" )
          }
       }
    }

@@ -60,7 +60,7 @@ class KRelationSelector (frame : Frame, user : User = NoUser()) : JDialog( frame
       }
       else
       {
-         val userArray = Ref.users().userArray
+         val userArray = KUsers.instance.userArray
 
          if(userArray.isEmpty())
             throw Exception( "No users found!" )
@@ -149,7 +149,7 @@ class KRelationSelector (frame : Frame, user : User = NoUser()) : JDialog( frame
             val selected = relationCombo.getSelectedItem()
             if (selected is KRelation)
             {
-               Ref.users().activate( selectedUser as KUser )
+               KUsers.instance.activate( selectedUser as KUser )
                selectedRelation = selected
                setVisible( false )
                dispose()

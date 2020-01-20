@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<product desc="Anything in the economy." id="100035" name="Product" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="products.xsd">
-     <product amount="1.0" desc="Garbage collection" id="1" name="Trash" price="85" unit="Hour"/>
-     <product amount="1.0" desc="Writing books" id="2" name="Authoring" price="20" unit="Hour"/>
-</product>

@@ -21,7 +21,7 @@ object Tabs : JTabbedPane(), ChangeListener
       val selectedTab = Tabs.getSelectedComponent()
       if (selectedTab is KTenderTab)
       {
-         val member = Ref.users().current.member
+         val member = KUsers.instance.current.member
          val tender = selectedTab.tender
 
          if (tender is KMutableTender)
@@ -29,8 +29,8 @@ object Tabs : JTabbedPane(), ChangeListener
             val target = tender.relation.target
             if (target != Target.UNDEFINED)
             {
-               val progressPath = Constants.USERS_DIR + SLASH + member.me.name + SLASH + Ref.settings.progress
-               Ref.productTree.load( progressPath + SLASH + target.name.toLowerCase() + ".xml" )
+               val progressPath = Constants.USERS_DIR + SLASH + member.me.name + SLASH + KSettings.instance.progress
+               GUI.productTree.load( progressPath + SLASH + target.name.toLowerCase() + ".xml" )
             }
          }
 

@@ -13,35 +13,32 @@ import apps.Constants.USERS_DIR
 import pen.Constants.SLASH
 
 /** The main frame/GUI of the app. */
-class KTenderEdit () : JFrame(), WindowListener
+class KFrame () : JFrame(), WindowListener
 {
-   companion object
-   {val instance by lazy { KTenderEdit() }}
-
    init
    {
       val splitpane = JSplitPane().apply {
          setDividerSize( 4 )
          setDividerLocation( 275 )
-         setLeftComponent(JScrollPane( Ref.productTree ))
+         setLeftComponent(JScrollPane( GUI.productTree ))
          setRightComponent( JSplitPane().apply {
             setDividerSize( 6 )
             setDividerLocation( 450 )
             setLeftComponent( Tabs )
-            setRightComponent( Ref.summary )
+            setRightComponent( GUI.summary )
          })
       }
 
       with( getContentPane() ) {
          if (KSettings.instance.toolbar)
-            add(KToolbar( Ref.hamburgerMenu.hamburgerButton ), BorderLayout.NORTH)
+            add(KToolbar( GUI.hamburgerMenu.hamburgerButton ), BorderLayout.NORTH)
 
          add( splitpane, BorderLayout.CENTER )
-         add(Ref.statusBar, BorderLayout.SOUTH)
+         add(GUI.statusBar, BorderLayout.SOUTH)
       }
 
       val START_PAGE = USERS_DIR + SLASH + KUsers.instance.current.member.me.name + SLASH + KSettings.instance.progress + SLASH + "index.html"
-      Ref.summary.load( START_PAGE )
+      GUI.summary.load( START_PAGE )
       setJMenuBar( KMenu() )
 
       setTitle( Lang.word( 301 ) + " - " + Lang.word( 3 ) )

@@ -1,17 +1,35 @@
 package tedit
 
 import kotlinx.serialization.Serializable
+import pen.Constants.SLASH
+import pen.readObject
 import pen.writeObject
 
-interface Settings
-class NoSettings : Settings
-
+/** Application settings. */
 @Serializable
-class KSettings () : Settings
+class KSettings ()
 {
+   companion object
+   {
+      private val FILE_NAME                            = "dist${SLASH}settings.json"
+      val instance                                     = KSettings.load()
+
+      private fun load () : KSettings
+      {
+         var ret = KSettings()
+         val obj = readObject<KSettings>({ serializer() }, FILE_NAME)
+
+         if (obj is KSettings)
+            ret = obj
+
+         return ret
+      }
+   }
+
    var progress                                        = "2020:1"
    var toolbar                                         = true
-   var defaultUser : Long                              = 0L
+   var defaultUser                                     = 0L
 
-   fun save () = writeObject<KSettings>( this, {KSettings.serializer()}, Main.SETTINGS_FILE )
+   /** Saves settings to file. */
+   fun save () = writeObject<KSettings>(this, { serializer() }, FILE_NAME)
 }

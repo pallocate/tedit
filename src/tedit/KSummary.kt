@@ -7,7 +7,7 @@ import javax.swing.event.HyperlinkListener
 import javax.swing.event.HyperlinkEvent
 import pen.Log
 
-/** Pane for showing product summaries in html format. */
+/** Web browser pane for showing product info etc. */
 class KSummary () : JEditorPane(), HyperlinkListener
 {
    init

@@ -2,15 +2,11 @@ package tedit
 
 import pen.Log
 import pen.LogLevel
-import pen.Constants
-import pen.readObject
 
 /** The main class. */
 object Main
 {
-   val USERS_FILE = "dist${Constants.SLASH}users.json"
-   val SETTINGS_FILE = "dist${Constants.SLASH}settings.json"
-
+   /** Handles command line arguments, then starts the application. */
    @JvmStatic
    fun main (args : Array<String>)
    {
@@ -41,56 +37,34 @@ object Main
           start()
    }
 
+   /** Instanciates settings, users and GUI. */
    private fun start ()
    {
       Log.info( "Welcome to Tender Edit!" )
-
       try
       {
-         /* Tries to read settings. */
-         val settingsObject = readObject<KSettings>( {KSettings.serializer()}, SETTINGS_FILE )
-         if (settingsObject is KSettings)
-            Ref.settings = settingsObject
+         val defaultUser = KSettings.instance.defaultUser
+
+         if (KUsers.instance.userMap.isEmpty())
+            throw Exception( "no users found" )
          else
-            Ref.settings = KSettings()
-
-         /* Tries to read users. */
-         val usersObject = readObject<KUsers>( {KUsers.serializer()}, USERS_FILE )
-         if (usersObject is KUsers)
          {
-            Ref.setUsers( usersObject )
-
-            if (Ref.users().userMap.isEmpty())
-               throw Exception( "no users found" )
-            else
+            with (KUsers.instance)
             {
-               if (Ref.settings.defaultUser > 0L)
-                  Ref.users().activate( Ref.settings.defaultUser )
+               if (defaultUser > 0L)
+                  if (!activate( defaultUser ))
+                     activate( userArray[0] )
                else
-                  Ref.users().activate( Ref.users().userMap[0]!! )
+                  activate( userArray[0] )
             }
          }
-         else
-            testMode()
 
-         /* Calls KTenderEdit to create the GUI. */
-         KTenderEdit.tenderEdit()
+         GUI.frame
       }
       catch (e : Exception)
       {
          Log.critical( "Critical exception, (${e.message})" )
          kotlin.system.exitProcess( 1 )
       }
-   }
-
-
-   private fun testMode ()
-   {
-      val users = KUsers()
-      users.testMode()
-      Ref.settings.defaultUser = 3L
-
-      Ref.setUsers( users )
-      Ref.users().activate( Ref.settings.defaultUser )
    }
 }

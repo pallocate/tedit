@@ -10,8 +10,9 @@ import javax.swing.border.LineBorder
 import apps.KProductTree
 
 /** Some miscellany references */
-object Ref
+object GUI
 {
+   val frame by lazy { KFrame() }
    val productTree                                     = KProductTree( KTreeSelectionHandler(), KMouseHandler() )
    val summary                                         = KSummary()
    val hamburgerMenu                                   = KHamburgerMenu()

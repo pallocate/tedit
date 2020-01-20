@@ -43,7 +43,7 @@ object EventHandler
     * @param event What event to handle. */
    fun handle (event : String)
    {
-      val tenderEdit = KTenderEdit.tenderEdit()
+      val tenderEdit = GUI.frame
 
       when (event)
       {
@@ -65,7 +65,7 @@ object EventHandler
          }
 
          OPEN ->
-            openTender()
+            EHFunctions.openTab()
 
          SAVE ->
             if (Tabs.current.proposalTable.modified == true && Tabs.current.filename != Lang.word( 3 ))
@@ -76,32 +76,32 @@ object EventHandler
                   updateTitle()
                }
                else
-                  saveTender()
+                  EHFunctions.saveTab()
             }
             else
-               saveTender()
+               EHFunctions.saveTab()
 
 
          SAVE_AS ->
-            saveTender()
+            EHFunctions.saveTab()
 
          CLOSE ->
             if (Tabs.current.proposalTable.modified == false)
-               closeTab()
+               EHFunctions.closeTab()
             else
                if (JOptionPane.showConfirmDialog(tenderEdit, Lang.word( 49 ) + "\n" + Lang.word( 24 ),
                Lang.word( 34 ), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE ) == JOptionPane.YES_OPTION)
-                  closeTab()
+                  EHFunctions.closeTab()
 
          ECONOMIC_RELATIONS ->
          {
-            val relationSelector = KRelationSelector( tenderEdit )
+            KRelationSelector( tenderEdit )
          }
 
          SAVE_SETTINGS ->
          {
-            Ref.settings.save()
-            Ref.users().save()
+            KSettings.instance.save()
+            KUsers.instance.save()
          }
 
          GET_UPDATES ->
@@ -130,7 +130,7 @@ object EventHandler
 
          SEARCH ->
          {
-            val productTree = Ref.productTree
+            val productTree = GUI.productTree
             val term = JOptionPane.showInputDialog(tenderEdit, arrayOf(JLabel(Lang.word( 20 ) + ": " + Lang.word( 208 )),
                   chkBox), Lang.word( 20 ), JOptionPane.QUESTION_MESSAGE )
 
@@ -145,7 +145,7 @@ object EventHandler
 
          SEARCH_NEXT ->
          {
-            val productTree = Ref.productTree
+            val productTree = GUI.productTree
             if (productTree.searchResult.size > 0)
             {
                if (productTree.searchResultIndex + 1 < productTree.searchResult.size)
@@ -176,28 +176,28 @@ object EventHandler
                proposalTable.setup()
                updateTitle()
             }
-            Ref.productTree.resetSearch()
+            GUI.productTree.resetSearch()
          }
 
          HELP ->
-            Ref.summary.load( Constants.RESOURCES_DIR + SLASH + "help.html" )
+            GUI.summary.load( Constants.RESOURCES_DIR + SLASH + "help.html" )
 
          ABOUT ->
             JOptionPane.showMessageDialog( tenderEdit, Lang.word( 301 ), "information", JOptionPane.INFORMATION_MESSAGE )
 
          TREE_SELECTION ->
          {
-            val dmt = Ref.productTree.getLastSelectedPathComponent()
+            val dmt = GUI.productTree.getLastSelectedPathComponent()
 
             dmt?.run {
                val selectedObject = (dmt as DefaultMutableTreeNode).getUserObject() as KProductInfo
-               val productInfoPath = "${Constants.USERS_DIR}${SLASH}${Ref.users().current.member.me.name}${SLASH}productinfo"
-               Ref.summary.load( "${productInfoPath}${SLASH}${selectedObject.id}.html" )
+               val productInfoPath = "${Constants.USERS_DIR}${SLASH}${KUsers.instance.current.member.me.name}${SLASH}productinfo"
+               GUI.summary.load( "${productInfoPath}${SLASH}${selectedObject.id}.html" )
             }
          }
 
          HAMBURGER ->
-            Ref.hamburgerMenu.show()
+            GUI.hamburgerMenu.show()
 
          else -> {}
       }
