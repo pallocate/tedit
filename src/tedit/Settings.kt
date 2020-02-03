@@ -12,7 +12,7 @@ class KSettings ()
    companion object
    {
       private val FILE_NAME                            = "dist${SLASH}settings.json"
-      val instance                                     = KSettings.load()
+      val instance                                     = load()
 
       private fun load () : KSettings
       {

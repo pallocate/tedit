@@ -5,12 +5,13 @@ import javax.swing.JCheckBox
 import javax.swing.JOptionPane
 import javax.swing.JLabel
 import javax.swing.tree.DefaultMutableTreeNode
+import pen.Constants.SLASH
+import pen.eco.Target
+import pen.eco.KProductInfo
 import pen.par.KMember
 import pen.par.KMutableTender
 import pen.par.KRelation
-import pen.eco.KProductInfo
 import apps.Constants
-import pen.Constants.SLASH
 
 /** A central place to handle events. */
 object EventHandler
@@ -180,7 +181,7 @@ object EventHandler
          }
 
          HELP ->
-            GUI.summary.load( Constants.RESOURCES_DIR + SLASH + "help.html" )
+            GUI.info.load( Constants.HELP_DIR + SLASH + "index.html" )
 
          ABOUT ->
             JOptionPane.showMessageDialog( tenderEdit, Lang.word( 301 ), "information", JOptionPane.INFORMATION_MESSAGE )
@@ -191,8 +192,18 @@ object EventHandler
 
             dmt?.run {
                val selectedObject = (dmt as DefaultMutableTreeNode).getUserObject() as KProductInfo
-               val productInfoPath = "${Constants.USERS_DIR}${SLASH}${KUsers.instance.current.member.me.name}${SLASH}productinfo"
-               GUI.summary.load( "${productInfoPath}${SLASH}${selectedObject.id}.html" )
+
+               val currentRelation = Tabs.current.tender.relation
+               if (currentRelation is KRelation)
+               {
+                  val productsDir = if (currentRelation.target == Target.PRODUCTION)
+                                       "jobinfo"
+                                    else
+                                       "productinfo"
+
+                  val productsInfoPath = "${Constants.USERS_DIR}${SLASH}${KUsers.instance.current.member.me.name}${SLASH}$productsDir"
+                  GUI.info.load( "${productsInfoPath}${SLASH}${selectedObject.id}.html" )
+               }
             }
          }
 

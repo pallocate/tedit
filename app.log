@@ -1,13 +1,15 @@
-2020-01-20 06:00:27 INFO: Welcome to Tender Edit!
-2020-01-20 06:00:27 DEBUG: Reading object file "dist/settings.json"
-2020-01-20 06:00:27 DEBUG: Reading object file "dist/users.json"
-2020-01-20 06:00:27 ERROR: Reading object file failed!
-2020-01-20 06:00:27 CRITICAL: Critical exception, (no users found)
-2020-01-20 06:02:17 INFO: Welcome to Tender Edit!
-2020-01-20 06:02:17 DEBUG: Reading object file "dist/settings.json"
-2020-01-20 06:02:17 DEBUG: Loding config file "plugins.conf"
-2020-01-20 06:02:17 DEBUG: Loding config file "log.conf"
-2020-01-20 06:02:17 DEBUG: Loading English dictionary
-2020-01-20 06:02:18 DEBUG: Loading product page "users/Patricia/2020:1/index.html"
-2020-01-20 06:02:22 DEBUG: Writing object
-2020-01-20 06:02:22 DEBUG: Writing object
+
+2020-01-26 09:33:42 INFO: Welcome to Tender Edit!
+2020-01-26 09:33:42 DEBUG: Reading object file "dist/settings.json"
+2020-01-26 09:33:42 DEBUG: Loding config file "plugins.conf"
+2020-01-26 09:33:42 DEBUG: Loding config file "log.conf"
+2020-01-26 09:33:42 DEBUG: Loading English dictionary
+2020-01-26 09:33:44 DEBUG: Loading info page "users/Patricia/2020:1/index.html"
+2020-01-26 09:33:55 DEBUG: Parsing XML file "users/Patricia/2020:1/production.xml"
+2020-01-26 09:34:00 DEBUG: Loading info page "users/Patricia/jobinfo/70140000.html"
+2020-01-26 09:34:03 DEBUG: Loading info page "users/Patricia/jobinfo/70130000.html"
+2020-01-26 09:34:03 DEBUG: Loading info page "users/Patricia/jobinfo/70130000.html"
+2020-01-26 09:34:06 DEBUG: Loading info page "users/Patricia/jobinfo/70140000.html"
+2020-01-26 09:34:06 DEBUG: Loading info page "users/Patricia/jobinfo/70140000.html"
+2020-01-26 09:34:07 DEBUG: Loading info page "users/Patricia/jobinfo/70130000.html"
+2020-01-26 09:34:07 DEBUG: Loading info page "users/Patricia/jobinfo/70130000.html"

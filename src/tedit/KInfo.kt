@@ -8,7 +8,7 @@ import javax.swing.event.HyperlinkEvent
 import pen.Log
 
 /** Web browser pane for showing product info etc. */
-class KSummary () : JEditorPane(), HyperlinkListener
+class KInfo () : JEditorPane(), HyperlinkListener
 {
    init
    {
@@ -18,12 +18,12 @@ class KSummary () : JEditorPane(), HyperlinkListener
 
   }
 
-   /** Loads file into summary pane.
+   /** Loads file into info pane.
      * @return True if successful */
    fun load (filename : String) : Boolean
    {
       var success = false
-      Log.debug( "Loading product page \"$filename\"" )
+      Log.debug( "Loading info page \"$filename\"" )
 
       if ((File( filename )).exists())
       {

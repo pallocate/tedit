@@ -48,18 +48,13 @@ object Main
          if (KUsers.instance.userMap.isEmpty())
             throw Exception( "no users found" )
          else
-         {
-            with (KUsers.instance)
+            with( KUsers.instance )
             {
-               if (defaultUser > 0L)
-                  if (!activate( defaultUser ))
-                     activate( userArray[0] )
-               else
+               if (defaultUser > 0L && !activate( defaultUser ))
                   activate( userArray[0] )
             }
-         }
 
-         GUI.frame
+         GUI.createInstance()
       }
       catch (e : Exception)
       {

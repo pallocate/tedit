@@ -25,7 +25,7 @@ class KFrame () : JFrame(), WindowListener
             setDividerSize( 6 )
             setDividerLocation( 450 )
             setLeftComponent( Tabs )
-            setRightComponent( GUI.summary )
+            setRightComponent( GUI.info )
          })
       }
 
@@ -38,7 +38,7 @@ class KFrame () : JFrame(), WindowListener
       }
 
       val START_PAGE = USERS_DIR + SLASH + KUsers.instance.current.member.me.name + SLASH + KSettings.instance.progress + SLASH + "index.html"
-      GUI.summary.load( START_PAGE )
+      GUI.info.load( START_PAGE )
       setJMenuBar( KMenu() )
 
       setTitle( Lang.word( 301 ) + " - " + Lang.word( 3 ) )

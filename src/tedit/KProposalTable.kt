@@ -13,11 +13,13 @@ import javax.swing.tree.TreeNode
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.event.*
 import pen.toLong
+import pen.eco.Target
 import pen.eco.KMutableProposal
 import pen.eco.KMutableProduct
 import pen.eco.KProductInfo
 import pen.eco.KQuantableProductInfo
 import pen.eco.KMutableHeader
+import pen.par.KRelation
 import pen.par.Tender
 import apps.Utils
 import apps.Constants.USERS_DIR
@@ -238,9 +240,18 @@ class KProposalTable () : JTable()
       {
          if (!isChanging && !proposal.products.isEmpty())
          {
-            val productInfoPath = "${USERS_DIR}${SLASH}${KUsers.instance.current.member.me.name}${SLASH}productinfo"
             selectedProductNum = (e.getSource() as DefaultListSelectionModel).getLeadSelectionIndex()
-            GUI.summary.load( "${productInfoPath}${SLASH}${getValueAt(selectedProductNum, 0)}.html" )
+            val currentRelation = Tabs.current.tender.relation
+            if (currentRelation is KRelation)
+            {
+               val productsDir = if (currentRelation.target == Target.PRODUCTION)
+                                    "jobinfo"
+                                 else
+                                    "productinfo"
+
+               val productInfoPath = "${USERS_DIR}${SLASH}${KUsers.instance.current.member.me.name}${SLASH}$productsDir"
+               GUI.info.load( "${productInfoPath}${SLASH}${getValueAt(selectedProductNum, 0)}.html" )
+            }
          }
       }
    }

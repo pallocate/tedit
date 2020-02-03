@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<product desc="Any job" id="100001" name="Job" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="products.xsd">
+
+   <product id="1" name="University" desc="Formosa heights university">
+      <product id="86121751" name="Physics and math teaching" desc="Teaching university physics and mathematics" amount="1.0" unit="Hour" price="150"/>
+   </product>
+
+   <product id="6" name="Hospital" desc="Formosa heights Hospital">
+      <product id="76110000" name="Cleaning" desc="Hospital cleaning and sterilization" amount="1.0" unit="Hour" price="900"/>
+   </product>
+
+   <product id="7" name="Farmland coop" desc="The Farmland cooperative">
+      <product id="77100000" name="Ecosystem design" desc="Permaculture design project" amount="1.0" unit="Hour" price="22"/>
+      <product id="81150000" name="Ecological improvements" desc="Improving resource flows project" amount="1.0" unit="Hour" price="31"/>
+   </product>
+
+</product>

@@ -9,6 +9,8 @@ object Constants
    /** Directory where avatar objects are stored. */
    val PARTICIPANTS_DIR                           = "${RESOURCES_DIR}${SLASH}participants"
    /** Directory where language translations are stored. */
+   val HELP_DIR                                   = "${RESOURCES_DIR}${SLASH}help"
+   /** Directory where language translations are stored. */
    val LANGUAGE_DIR                               = "${RESOURCES_DIR}${SLASH}language"
    /** Directory where application icons are stored. */
    val ICONS_DIR                                  = pen.Constants.ICONS_DIR

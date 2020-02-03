@@ -14,7 +14,7 @@ object GUI
 {
    val frame by lazy { KFrame() }
    val productTree                                     = KProductTree( KTreeSelectionHandler(), KMouseHandler() )
-   val summary                                         = KSummary()
+   val info                                            = KInfo()
    val hamburgerMenu                                   = KHamburgerMenu()
    val fileChooser                                     = JFileChooser(File( "." )).apply {
       resetChoosableFileFilters()
@@ -27,4 +27,6 @@ object GUI
       override fun getBorder() = LineBorder( Color.white, 1 )
       override fun getPreferredSize() = Dimension( 1000, 16 )
    }
+
+   fun createInstance () = frame
 }
