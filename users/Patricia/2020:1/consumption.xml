@@ -9,6 +9,7 @@
       <product id="85101500" name="Medical care" desc="Healthcare center" unit="Hour" price="0" />
       <product id="91111600" name="Personal assistance" desc="Personal assistance and care" unit="Hour" price="0" />
       <product id="83121702" name="Radio DIY" desc="Radio service" price="0" />
+      <product id="10171504" name="Compost" desc="Composted organic materials" />
 
    </product>
 
@@ -50,7 +51,7 @@
       <product id="27112002" name="Spade" desc="Digging spade" unit="Piece" />
       <product id="21101504" name="Weeder" desc="Agricultural machinery" ssunit="Piece" />
       <product id="50181901" name="Bread" desc="Fresh bread loaf" unit="Piece" />
-      <product id="50182001" name="Apple pie" desc="Fruit pie" unit="Piece" />
+      <product id="50182001" name="Pumpkin pie" desc="Fruit pie" unit="Piece" />
       <product id="53101500" name="Trousers" desc="Unisex trousers" unit="Piece" />
       <product id="53101604" name="Blous" desc="Velvet blous" unit="Piece" />
       <product id="53103000" name="Tshirt" desc="Standard Tshirt" unit="Piece" />
