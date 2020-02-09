@@ -51,11 +51,15 @@ object EventHandler
          NEW ->
          {
             val relationSelector = KRelationSelector( tenderEdit )
-            val rel = relationSelector.selectedRelation
+            val relation = relationSelector.selectedRelation
 
-            if (rel is KRelation)
+            if (relation is KRelation)
             {
-               val tenderTab = KTenderTab(KMutableTender( relation = rel ))
+               val settings = KSettings.instance
+               val header = pen.eco.KMutableHeader( pen.net.Network.generateId(), settings.year(), settings.iteration(), relation.target )
+               val proposal = pen.eco.KMutableProposal( header )
+               val tender = KMutableTender( proposal, relation )
+               val tenderTab = KTenderTab( tender )
 
                Tabs.addTab(Lang.word( 3 ), tenderTab)
                Tabs.setSelectedComponent( tenderTab )

@@ -34,21 +34,15 @@ object Utils
    fun vectorize (productInfo : ProductInfo) : Vector<Object>
    {
       val ret = Vector<Object>()
-
       ret.add( productInfo.id as Object )
 
-      var apu = ""
-      if (productInfo.amount != 0F)
-      {
-         apu = apu + ", " + productInfo.amount
-         if (productInfo.prefix != "")
-            apu = apu + Prefixes.symbol.getOrElse( productInfo.prefix, {productInfo.prefix.toString()} )
+      val apu = productInfo.apu()
+      ret.add( (productInfo.toString() +  if (apu == "")
+                                             ""
+                                          else
+                                             ", " + apu
+      ) as Object )
 
-         if (productInfo.unit != "")
-            apu = apu + Units.symbol.getOrElse( productInfo.unit, {productInfo.unit.toString()} )
-      }
-
-      ret.add( (productInfo.name + apu) as Object )
       ret.add( productInfo.price.toString() as Object )
       ret.add( if (productInfo is KQuantableProductInfo)
                   productInfo.qty.toString() as Object

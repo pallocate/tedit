@@ -29,7 +29,7 @@ object Tabs : JTabbedPane(), ChangeListener
             val target = tender.relation.target
             if (target != Target.UNDEFINED)
             {
-               val progressPath = Constants.USERS_DIR + SLASH + member.me.name + SLASH + KSettings.instance.progress
+               val progressPath = Constants.USERS_DIR + SLASH + member.me.name + SLASH + KSettings.instance.progression()
                GUI.productTree.load( progressPath + SLASH + target.name.toLowerCase() + ".xml" )
             }
          }

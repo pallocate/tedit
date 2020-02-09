@@ -6,11 +6,8 @@ import javax.swing.JTree
 import javax.swing.ImageIcon
 import javax.swing.tree.*
 import javax.swing.event.TreeSelectionListener
-import pen.eco.Product
-import pen.eco.ProductInfo
-import pen.eco.NoProductInfo
-import pen.eco.KProductInfo
-import pen.eco.KQuantableProductInfo
+import pen.Log
+import pen.eco.*
 
 /** An implementation of JTree, used for selecting products. */
 open class KProductTree (treeSelectionHandler : TreeSelectionListener, mouseHandler : MouseListener) : JTree()
@@ -39,8 +36,7 @@ open class KProductTree (treeSelectionHandler : TreeSelectionListener, mouseHand
          fun getTreeCellRendererComponent( t : JTree, dmt : Object, s : Boolean, e : Boolean, isLeaf : Boolean, r : Int, f : Boolean) : Component
          {
             super.getTreeCellRendererComponent( t, dmt, s, e, isLeaf, r, f )
-            if (!isLeaf && ((dmt as DefaultMutableTreeNode).getUserObject() as KProductInfo).analogue.toLowerCase() ==
-             "true" && analogueIcon != null)
+            if (!isLeaf && ((dmt as DefaultMutableTreeNode).getUserObject() as KProductInfo).analogue && analogueIcon != null)
                setIcon( analogueIcon )
             return this
          }
@@ -62,11 +58,15 @@ open class KProductTree (treeSelectionHandler : TreeSelectionListener, mouseHand
 
    /** Loads an product tree XML file.
      * @return null if load failed. */
-   fun load (filename : String) : Int? = ProductTreeParser.parse( filename )?.let {
-      model.setRoot( it )
-      expand( it )
-      treeTop = it
-      0
+   fun load (filename : String) : Int?
+   {
+      Log.debug( "Loading product tree $filename" )
+      return ProductTreeParser.parse( filename )?.let {
+         model.setRoot( it )
+         expand( it )
+         treeTop = it
+         0
+      }
    }
 
    fun productInfo (product : Product, dmt : DefaultMutableTreeNode = treeTop) : ProductInfo
@@ -128,7 +128,7 @@ open class KProductTree (treeSelectionHandler : TreeSelectionListener, mouseHand
          var n : TreeNode? = treeNode
          while (ret == false && n != null)
          {
-            if (((n as DefaultMutableTreeNode).getUserObject() as KProductInfo).analogue.toLowerCase() == "true")
+            if (((n as DefaultMutableTreeNode).getUserObject() as KProductInfo).analogue)
                ret = true
 
             if (treeNode.isLeaf)
