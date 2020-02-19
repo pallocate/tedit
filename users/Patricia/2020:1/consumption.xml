@@ -35,6 +35,7 @@
          <product id="50111000" name="Meat" desc="Freash meat">
             <product id="50111512" name="Pig" desc="Freash pig meat" prefix="kilo" unit="gram" price="300" />
             <product id="50111513" name="Cheep" desc="Freash cheep meat" prefix="kilo" unit="gram" price="400" />
+            <product id="50111514" name="Beef" desc="Freash beef meat" prefix="kilo" unit="gram" price="600" />
          </product>
          <product id="50001001" name="Other">
             <product id="50221100" name="Flour" desc="Ground cereal, silted" prefix="kilo" unit="gram" price="40" />

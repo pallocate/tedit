@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 import pen.Constants.SLASH
 import pen.readObject
 import pen.writeObject
+import pen.toInt
 
 /** Application settings. */
 @Serializable
@@ -26,40 +27,21 @@ class KSettings ()
       }
    }
 
-   private var progress                                = "2020:1"
+   var progress                                        = "2020:1"
+      /* Field access validation, since this object probably have been read from file. */
       get ()
       {
          var ret = "2020:1"
 
          if (field.length > 5 && field.length < 8)
-         {
-            if (field[4] == ':')
+            if (field.replaceFirst( ":", "." ).toFloatOrNull() != null)
                ret = field
-         }
 
          return ret
       }
 
-   fun year () : Int
-   {
-      val y = progress.substring( 0..3 ).toIntOrNull()
-      return   if (y == null)
-                  2020
-               else
-                  y
-   }
-
-   fun iteration () : Int
-   {
-      val p = progress
-      val i = p.substring( 5 until p.length ).toIntOrNull()
-      return   if (i == null)
-                  1
-               else
-                  i
-   }
-
-   fun progression () = year().toString() +  ":" + iteration()
+   fun year () = progress.substringBefore( ':' ).toInt()
+   fun iteration () = progress.substringAfter( ':' ).toInt()
 
    var toolbar                                         = true
    var defaultUser                                     = 0L

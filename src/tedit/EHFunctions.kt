@@ -30,20 +30,25 @@ object EHFunctions
                if (rel is KRelation)
                {
                   val tenderTab = KTenderTab()
-                  tenderTab.load( pathname )
-                  (tenderTab.tender as KMutableTender).relation = rel
+                  val tender = tenderTab.load( pathname )
+                  if (tender is KMutableTender)
+                  {
+                     tender.relation = rel
 
-                  Tabs.addTab( name, tenderTab )
-                  Tabs.setSelectedComponent( tenderTab )
-                  tenderTab.proposalTable.setup()
+                     Tabs.addTab( name, tenderTab )
+                     Tabs.setSelectedComponent( tenderTab )
+                     tenderTab.proposalTable.setup()
 
-                  updateTitle()
+                     updateTitle()
+                  }
+                  else
+                     Log.warn( "Open tender failed!" )
                }
                else
-                  Log.warn( "Open tender failed (no role selected)" )
+                  Log.warn( "Open tender failed! (no role selected)" )
             }
             else
-               Log.warn( "Open tender failed (unspported file format)" )
+               Log.warn( "Open tender failed! (unspported file format)" )
          }
       }
    }

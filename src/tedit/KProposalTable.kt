@@ -249,7 +249,7 @@ class KProposalTable () : JTable()
                                  else
                                     "productinfo"
 
-               val productInfoPath = "${USERS_DIR}${SLASH}${KUsers.instance.current.member.me.name}${SLASH}$productsDir"
+               val productInfoPath = "${USERS_DIR}${SLASH}${KUsers.instance.current.member.me.name()}${SLASH}$productsDir"
                GUI.info.load( "${productInfoPath}${SLASH}${getValueAt(selectedProductNum, 0)}.html" )
             }
          }

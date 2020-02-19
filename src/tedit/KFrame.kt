@@ -37,7 +37,7 @@ class KFrame () : JFrame(), WindowListener
          add(GUI.statusBar, BorderLayout.SOUTH)
       }
 
-      val START_PAGE = USERS_DIR + SLASH + KUsers.instance.current.member.me.name + SLASH + KSettings.instance.progression() + SLASH + "index.html"
+      val START_PAGE = USERS_DIR + SLASH + KUsers.instance.current.member.me.name() + SLASH + KSettings.instance.progress + SLASH + "index.html"
       GUI.info.load( START_PAGE )
       setJMenuBar( KMenu() )
 

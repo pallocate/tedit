@@ -30,7 +30,7 @@ class KTenderTab (tender : Tender = NoTender()) : JScrollPane()
       setViewportView( proposalTable )
    }
 
-   fun load (filename : String)
+   fun load (filename : String) : Tender
    {
       val obj = readObject<KMutableTender>( {KMutableTender.serializer()}, filename )
 
@@ -39,6 +39,7 @@ class KTenderTab (tender : Tender = NoTender()) : JScrollPane()
          tender = obj
          this.filename = filename
       }
+      return tender
    }
 
    fun save () = writeObject<KMutableTender>( tender as KMutableTender, {KMutableTender.serializer()}, filename )

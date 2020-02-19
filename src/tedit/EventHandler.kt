@@ -205,7 +205,7 @@ object EventHandler
                                     else
                                        "productinfo"
 
-                  val productsInfoPath = "${Constants.USERS_DIR}${SLASH}${KUsers.instance.current.member.me.name}${SLASH}$productsDir"
+                  val productsInfoPath = "${Constants.USERS_DIR}${SLASH}${KUsers.instance.current.member.me.name()}${SLASH}$productsDir"
                   GUI.info.load( "${productsInfoPath}${SLASH}${selectedObject.id}.html" )
                }
             }

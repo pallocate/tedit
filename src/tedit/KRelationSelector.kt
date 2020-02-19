@@ -1,10 +1,6 @@
 package tedit
 
-import java.awt.Font
-import java.awt.Dimension
-import java.awt.Frame
-import java.awt.GridLayout
-import java.awt.BorderLayout
+import java.awt.*
 import java.awt.event.ActionListener
 import java.awt.event.ActionEvent
 import javax.swing.*
@@ -16,8 +12,8 @@ import apps.Constants
 
 class KRelationSelector (frame : Frame, user : User = NoUser()) : JDialog( frame, Lang.word( 330 ), true ), ActionListener
 {
-   var selectedUser : User                                     = NoUser()
-   var selectedRelation : Relation                             = NoRelation()
+   var selectedUser : User                             = NoUser()
+   var selectedRelation : Relation                     = NoRelation()
 
    private val okButton                                = JButton(Lang.word( 10 ))
    private val cancelButton                            = JButton(Lang.word( 11 ))
@@ -31,24 +27,20 @@ class KRelationSelector (frame : Frame, user : User = NoUser()) : JDialog( frame
 
    init
    {
-      setLayout( BorderLayout() )
-      val font = getFont().getName()
-
-      okButton.setFont(Font( font, Font.BOLD, 15 ))
+      val font = Font( getFont().getName(), Font.BOLD, 15 )
+      okButton.setFont( font )
       okButton.setActionCommand( OK )
       okButton.addActionListener( this )
       cancelButton.setActionCommand( CANCEL )
-      cancelButton.setFont(Font( font, Font.BOLD, 15 ))
+      cancelButton.setFont( font )
       cancelButton.addActionListener( this )
-
       relationCombo.setActionCommand( RELATION_SELECT )
       userCombo.setActionCommand( USER_SELECT )
 
       /* Start with everything disabled */
       okButton.setEnabled( false )
-      relationCombo.setSelectedItem( null )
       relationCombo.setEnabled( false )
-      userCombo.setSelectedItem( null )
+      relationCombo.setSelectedItem( null )
       userCombo.setEnabled( false )
 
       /* Users */
@@ -56,7 +48,7 @@ class KRelationSelector (frame : Frame, user : User = NoUser()) : JDialog( frame
       {
          userCombo.setModel( DefaultComboBoxModel(arrayOf( user )) )
          userCombo.setSelectedIndex( 0 )
-         doRelations()
+         doTheRelations()
       }
       else
       {
@@ -67,10 +59,10 @@ class KRelationSelector (frame : Frame, user : User = NoUser()) : JDialog( frame
          else
          {
             userCombo.setModel( DefaultComboBoxModel( userArray ) )
-            userCombo.setSelectedIndex( 0 )
+            userCombo.setSelectedIndex( -1 )
 
             if (userCombo.getItemCount() == 1)
-               doRelations()
+               doTheRelations()
             else
             {
                userCombo.setEnabled( true )
@@ -79,59 +71,12 @@ class KRelationSelector (frame : Frame, user : User = NoUser()) : JDialog( frame
          }
       }
 
-      /* Add stuff */
-      add(JPanel().apply {
-         setLayout(GridLayout( 8, 1 ))
-         add( JLabel() )
-         add( JPanel().apply {add( JLabel(Lang.word( 205 )) )} )
-         add( JPanel().apply {add( userCombo )} )
-
-         add( JLabel() )
-         add( JPanel().apply {add( JLabel(Lang.word( 206 ) + ":") )} )
-         add( JPanel().apply {add( relationCombo )} )
-
-      }, BorderLayout.CENTER)
-
-      add(JPanel().apply {
-         setLayout(GridLayout( 1, 5 ))
-         setBorder(EmptyBorder( 15, 0, 15, 0 ))
-         add( JLabel() )
-         add( cancelButton )
-         add( JLabel() )
-         add( okButton )
-         add( JLabel() )
-      }, BorderLayout.SOUTH)
+      layoutGUI()
 
       setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE )
-      setSize( Dimension( 460, 460 ))
       setLocationRelativeTo( null )
       setIconImage(ImageIcon( Constants.ICONS_DIR + Constants.SLASH+ "system-users.png" ).getImage())
       setVisible( true )
-   }
-
-   /* Relations */
-   private fun doRelations ()
-   {
-//      userCombo.setEnabled( false )
-      selectedUser = userCombo.getSelectedItem() as KUser
-      val relations = (selectedUser as KUser).member.economicRelations()
-
-      if (relations.size == 0)
-         throw Exception( "No relations" )
-      else
-      {
-         relationCombo.setModel(DefaultComboBoxModel( relations ))
-         relationCombo.setSelectedIndex( 0 )
-
-         if (relationCombo.getItemCount() == 1)
-            okButton.setEnabled( true )
-         else
-         {
-            relationCombo.setEnabled( true )
-            if (relationCombo.getActionListeners().size < 1)
-               relationCombo.addActionListener( this )
-         }
-      }
    }
 
    override fun actionPerformed (e : ActionEvent)
@@ -141,7 +86,7 @@ class KRelationSelector (frame : Frame, user : User = NoUser()) : JDialog( frame
       when (actionCommand)
       {
          USER_SELECT ->
-            doRelations()
+            doTheRelations()
          RELATION_SELECT ->
             okButton.setEnabled( true )
          OK->
@@ -163,5 +108,111 @@ class KRelationSelector (frame : Frame, user : User = NoUser()) : JDialog( frame
          }
          else -> {}
       }
+   }
+
+   /* Relations */
+   private fun doTheRelations ()
+   {
+//      userCombo.setEnabled( false )
+      selectedUser = userCombo.getSelectedItem() as KUser
+      val relations = (selectedUser as KUser).member.economicRelations()
+
+      if (relations.size == 0)
+         throw Exception( "No relations" )
+      else
+      {
+         relationCombo.setModel(DefaultComboBoxModel( relations ))
+         relationCombo.setSelectedIndex( -1 )
+
+         if (relationCombo.getItemCount() == 1)
+            okButton.setEnabled( true )
+         else
+         {
+            relationCombo.setEnabled( true )
+            if (relationCombo.getActionListeners().size < 1)
+               relationCombo.addActionListener( this )
+         }
+      }
+   }
+
+   /** The layout is a crude NetBeans-GUI traslation to Kotlin.  */
+   private fun layoutGUI ()
+   {
+      val jLabel1 = JLabel().apply { setText(Lang.word( 205 )) }
+      val jLabel2 = JLabel().apply { setText(Lang.word( 206 )) }
+
+
+      val jPanel1 = JPanel()
+      val jPanel2 = JPanel()
+      val jPanel1Layout = GroupLayout( jPanel1 )
+      jPanel1.setLayout( jPanel1Layout )
+
+      jPanel1Layout.setHorizontalGroup( jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING ).addGroup(
+         GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addContainerGap( GroupLayout.DEFAULT_SIZE, Int.MAX_VALUE )
+            .addComponent( cancelButton )
+            .addPreferredGap( LayoutStyle.ComponentPlacement.UNRELATED )
+            .addComponent( okButton )
+            .addContainerGap()
+         ) )
+
+      jPanel1Layout.setVerticalGroup( jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+         jPanel1Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+            .addComponent( okButton )
+            .addComponent( cancelButton ))
+            .addContainerGap( 33, Int.MAX_VALUE )
+         ) )
+
+      val jPanel2Layout = GroupLayout( jPanel2 )
+      jPanel2.setLayout( jPanel2Layout )
+
+      jPanel2Layout.setHorizontalGroup( jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+         GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addContainerGap( 96, Int.MAX_VALUE )
+            .addGroup(
+               jPanel2Layout.createParallelGroup( GroupLayout.Alignment.LEADING )
+               .addComponent( relationCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE )
+               .addComponent( userCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE )
+               .addComponent( jLabel2 )
+               .addComponent( jLabel1 )
+            )
+            .addGap( 86, 86, 86 )
+      ) )
+
+      jPanel2Layout.setVerticalGroup(
+         jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+            jPanel2Layout.createSequentialGroup()
+            .addGap( 44, 44, 44 )
+            .addComponent( jLabel1 )
+            .addPreferredGap( LayoutStyle.ComponentPlacement.RELATED )
+            .addComponent( userCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE )
+            .addGap( 28, 28, 28 )
+            .addComponent( jLabel2 )
+            .addPreferredGap( LayoutStyle.ComponentPlacement.RELATED )
+            .addComponent( relationCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE )
+            .addContainerGap( 62, Int.MAX_VALUE )
+         )
+      )
+
+      val layout = GroupLayout( getContentPane() )
+      getContentPane().setLayout( layout )
+
+      layout.setHorizontalGroup(
+         layout.createParallelGroup( GroupLayout.Alignment.LEADING )
+         .addComponent( jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Int.MAX_VALUE )
+         .addComponent( jPanel2, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Int.MAX_VALUE )
+      )
+
+      layout.setVerticalGroup(
+         layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+            GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+      )
+
+      pack()
    }
 }

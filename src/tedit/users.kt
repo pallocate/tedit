@@ -7,6 +7,7 @@ import pen.Log
 import pen.Constants.SLASH
 import pen.readObject
 import pen.writeObject
+import pen.par.KMe
 import pen.par.KMember
 
 interface User
@@ -17,9 +18,9 @@ class NoUser : User
 class KUser : User
 {
    var language                                        = "English"
-   var member                                          = KMember()
+   var member                                          = KMember(KMe())
 
-   override fun toString ()                            = "${member.me.name}"
+   override fun toString ()                            = "${member.me.name()}"
 }
 
 @Serializable
