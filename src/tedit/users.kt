@@ -18,7 +18,7 @@ class NoUser : User
 class KUser : User
 {
    var language                                        = "English"
-   var member                                          = KMember(KMe())
+   var member                                          = KMember(KMe( 0L ))
 
    override fun toString ()                            = "${member.me.name()}"
 }

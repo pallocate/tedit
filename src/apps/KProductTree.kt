@@ -10,7 +10,7 @@ import pen.Log
 import pen.eco.*
 
 /** An implementation of JTree, used for selecting products. */
-open class KProductTree (treeSelectionHandler : TreeSelectionListener, mouseHandler : MouseListener) : JTree()
+class KProductTree (treeSelectionHandler : TreeSelectionListener, mouseHandler : MouseListener) : JTree()
 {
    var treeTop : DefaultMutableTreeNode         = DefaultMutableTreeNode( KProductInfo() )
    var model : DefaultTreeModel                 = DefaultTreeModel( treeTop )
@@ -157,7 +157,7 @@ open class KProductTree (treeSelectionHandler : TreeSelectionListener, mouseHand
 
    /** Does a one level expansion of the graphical tree.
      * @param dmt The tree/subtree to expand. */
-   open fun expand (dmt : DefaultMutableTreeNode)
+   fun expand (dmt : DefaultMutableTreeNode)
    {
       val children = dmt.children()
 

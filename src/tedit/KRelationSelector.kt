@@ -141,7 +141,6 @@ class KRelationSelector (frame : Frame, user : User = NoUser()) : JDialog( frame
       val jLabel1 = JLabel().apply { setText(Lang.word( 205 )) }
       val jLabel2 = JLabel().apply { setText(Lang.word( 206 )) }
 
-
       val jPanel1 = JPanel()
       val jPanel2 = JPanel()
       val jPanel1Layout = GroupLayout( jPanel1 )
