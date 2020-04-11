@@ -28,8 +28,9 @@ class KUsers ()
 {
    companion object
    {
-      private val FILE_NAME                            = "dist${SLASH}users.json"
-//      val instance                                     = load()                            // Load instance from file
+      private val FILE_NAME                            = "users.json"
+
+//      val instance                                     = load()                 // Load instance from file
 val instance = KUsers().apply {userArray = arrayOf(KUser().apply {member = pen.tests.ExampleMembers.patricia()}, KUser().apply {member = pen.tests.ExampleMembers.david()}); userArray.associateByTo( userMap, {it.member.me.contactId} )}
 
       fun load () : KUsers

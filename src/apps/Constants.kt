@@ -5,10 +5,8 @@ object Constants
    val SLASH                                      = pen.Constants.SLASH
    val JSON_EXTENSION                             = pen.Constants.JSON_EXTENSION
    /** Directory where recources are stored. */
-   val RESOURCES_DIR                              = "dist${SLASH}resources"
+   val RESOURCES_DIR                              = "build${SLASH}dist${SLASH}resources"
    /** Directory where avatar objects are stored. */
-   val PARTICIPANTS_DIR                           = "${RESOURCES_DIR}${SLASH}participants"
-   /** Directory where language translations are stored. */
    val HELP_DIR                                   = "${RESOURCES_DIR}${SLASH}help"
    /** Directory where language translations are stored. */
    val LANGUAGE_DIR                               = "${RESOURCES_DIR}${SLASH}language"

@@ -1,0 +1,76 @@
+#!/bin/sh
+
+JUNIT_EXECUTABLE=dist/lib/epl/junit-platform-console-standalone.jar
+
+testcase="all"
+if [ $2 ]; then
+   if [ $3 ]; then
+      testcase="$2.$3"
+   else
+      testcase=""
+   fi
+fi
+
+case $1 in
+   "pen")
+      cd /home/projects/pen/current
+      CP=$JUNIT:$PEN_TESTS:$STD_LIBS:$PEN:$PLUGINS:$STDLIB:$REFLECT:$SERIAL_RUN:$JNA
+
+      if [ $testcase = "all" ]; then
+         echo "Running tests.."
+         java -jar $JUNIT_EXECUTABLE -e junit-jupiter -E junit-vintage --reports-dir .. --classpath $CP --scan-classpath
+      else
+         testcase="pen.tests.$testcase"
+         echo "Running test $testcase"
+         java -jar $JUNIT_EXECUTABLE -e junit-jupiter -E junit-vintage --reports-dir .. --classpath $CP --select-class "$testcase"
+      fi
+   ;;
+
+   "plugins")
+      cd /home/projects/plugins/current
+      CP=.:$JUNIT:dist/lib/pen/examples.jar:$PLUGINS_TESTS:$STD_LIBS:$PEN:$PLUGINS:$STDLIB:$REFLECT:$SERIAL_RUN:$EXPOSED:$JNA
+
+      if [ $testcase = "all" ]; then
+         echo "Running tests.."
+         java -jar $JUNIT_EXECUTABLE -e junit-jupiter -E junit-vintage --reports-dir .. --classpath $CP --scan-classpath
+      else
+         testcase="plugins.tests.$testcase"
+         echo "Running test $testcase"
+         java -jar $JUNIT_EXECUTABLE -e junit-jupiter -E junit-vintage --reports-dir .. --classpath $CP --select-class "$testcase"
+      fi
+   ;;
+
+   "tedit")
+      cd /home/projects/tedit/current
+      CP=.:$STD_LIBS:$PEN:$PLUGINS:$JUNIT:$JNA
+
+      if [ $testcase = "all" ]; then
+         echo "Running tests.."
+         java -jar $JUNIT_EXECUTABLE -e junit-jupiter -E junit-vintage --reports-dir .. --classpath $CP --scan-classpath
+      else
+         echo "Running test $testcase"
+         java -jar $JUNIT_EXECUTABLE -e junit-jupiter -E junit-vintage --reports-dir .. --classpath $CP --select-class "tedit.tests.$testcase"
+      fi
+   ;;
+
+   "sim")
+      cd /home/projects/sim/current
+      CP=.:$STD_LIBS:$PEN:$JUNIT:$STDLIB:$REFLECT:$JNA
+
+      if [ $testcase = "all" ]; then
+         echo "Running tests.."
+         java -jar $JUNIT_EXECUTABLE -e junit-jupiter -E junit-vintage --reports-dir .. --classpath $CP --scan-classpath
+      else
+         echo "Running test $testcase"
+         java -jar $JUNIT_EXECUTABLE -e junit-jupiter -E junit-vintage --reports-dir .. --classpath $CP --select-class "sim.tests.$testcase"
+      fi
+   ;;
+
+   *)
+      echo "Usage: tests project [section testcase]"
+   ;;
+esac
+
+cd /home/projects/build/dist
+
+rm -f test.db test.out

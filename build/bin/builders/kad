@@ -1,0 +1,29 @@
+#!/bin/sh
+
+cd /home/projects/kad/current
+
+task="all"
+if [ $1 ]; then
+   task=$1
+fi
+
+if [ $task = "all" ]; then
+   CLASS_PATH=$COROUTINES:$SERIAL_RUN:$PEN:$JNA
+   cmd-timed "kotlinc -d dist/lib/kad/kad.jar -cp $CLASS_PATH -Xplugin=dist/lib/kotlin/kotlinx-serialization-compiler-plugin.jar src/jvm"
+
+elif [ $task = "tests" ]; then
+   CLASS_PATH=$PEN:$JUNIT:dist/lib/kad/kad.jar
+   cmd-timed "kotlinc -d dist/lib/kad/tests.jar -cp $CLASS_PATH src/jvm_tests"
+
+elif [ $task = "api" ]; then
+   clear
+   echo "Creating api docs.." ; echo
+   java -cp dist/lib/apache/kotlin-stdlib.jar -jar /home/local/lib/dokka-fatjar.jar src -output ~/Documents/Docs/kad
+
+else
+   echo "Usage: $0 task"
+   echo
+   echo "Tasks:"
+   echo "all            run            api"
+fi
+echo

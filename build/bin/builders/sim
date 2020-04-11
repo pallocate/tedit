@@ -1,0 +1,30 @@
+#!/bin/sh
+
+cd /home/projects/sim/current
+
+task="all"
+if [ $1 ]; then
+   task=$1
+fi
+
+if [ $task = "all" ]; then
+   CLASS_PATH=$PEN:$KAD:$STDLIB:$REFLECT:$JNA
+   cmd-timed "kotlinc -d dist/lib/sim/sim.jar -cp $CLASS_PATH src"
+
+elif [ $task = "run" ]; then
+   echo Running..
+   CLASS_PATH=dist/lib/sim/sim.jar:$PEN:$KAD:$STDLIB:$REFLECT:$JNA
+   kotlin -cp $CLASS_PATH sim.Main $2
+
+elif [ $task = "api" ]; then
+   clear
+   echo "Creating api docs.." ; echo
+   java -cp dist/lib/apache/kotlin-stdlib.jar -jar /home/local/lib/dokka-fatjar.jar src/sim -output ~/Documents/Docs/sim
+
+else
+   echo "Usage: $0 task"
+   echo
+   echo "Tasks:"
+   echo "all            run            api"
+fi
+echo
