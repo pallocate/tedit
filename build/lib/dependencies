@@ -1,0 +1,10 @@
+libsodium-1.0.18
+joda-time-2.10.jar
+junit-jupiter-api-5.4.2.jar
+junit-platform-console-standalone-1.4.2.jar
+exposed-0.16.3.jar
+slf4j-api-1.8.0-beta4.jar
+kotlinx-serialization-runtime-0.20.0.jar
+kotlinx-serialization-runtime-0.14.0.jar
+jna-5.3.1.jar
+dokka-fatjar-0.9.18.jar
