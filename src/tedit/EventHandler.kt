@@ -1,17 +1,20 @@
 package tedit
 
-import java.io.File
 import javax.swing.JCheckBox
 import javax.swing.JOptionPane
 import javax.swing.JLabel
 import javax.swing.tree.DefaultMutableTreeNode
-import pen.Constants.SLASH
+import pen.generateId
 import pen.eco.Target
+import pen.eco.KProposal
 import pen.eco.KProductInfo
-import pen.par.KMember
-import pen.par.KMutableTender
-import pen.par.KRelation
-import apps.Constants
+import tedit.utils.Constants.SLASH
+import tedit.utils.Constants.HELP_DIR
+import tedit.utils.Constants.USERS_DIR
+import tedit.session.Session
+import tedit.session.KTenderDocument
+import tedit.gui.GUI
+import tedit.gui.KRelationSelector
 
 /** A central place to handle events. */
 object EventHandler
@@ -40,8 +43,7 @@ object EventHandler
 
    private val chkBox                          = JCheckBox(Lang.word( 242 ))
 
-   /** Handles events.
-    * @param event What event to handle. */
+   /** Handles most of the events. */
    fun handle (event : String)
    {
       val tenderEdit = GUI.frame
@@ -52,51 +54,53 @@ object EventHandler
          {
             val relationSelector = KRelationSelector( tenderEdit )
             val relation = relationSelector.selectedRelation
+            val user = relationSelector.selectedUser
 
-            if (relation is KRelation)
+            if (!user.isVoid() && !relation.isVoid())
             {
-               val settings = KSettings.instance
-               val header = pen.eco.KMutableHeader( pen.net.Network.generateId(), settings.year(), settings.iteration(), relation.target )
-               val proposal = pen.eco.KMutableProposal( header )
-               val tender = KMutableTender( proposal, relation )
-               val tenderTab = KTenderTab( tender )
+               val settings = Session.settings
+               val header = pen.eco.KHeader( generateId(), settings.year(), settings.iteration(), relation.target )
+               val proposal = pen.eco.KProposal( header )
+               val document = KTenderDocument( proposal, relation, user )
+               val tab = document.proposalTable.tab
 
-               Tabs.addTab(Lang.word( 3 ), tenderTab)
-               Tabs.setSelectedComponent( tenderTab )
-               tenderTab.proposalTable.setup()
-
+               GUI.tabs.addTab(Lang.word( 3 ), tab)
+               GUI.tabs.setSelectedComponent( tab )
+               document.proposalTable.setup()
                updateTitle()
             }
          }
 
          OPEN ->
-            EHFunctions.openTab()
+            openTab()
 
          SAVE ->
-            if (Tabs.current.proposalTable.modified == true && Tabs.current.filename != Lang.word( 3 ))
+            if (Session.documents.activeDocument.proposalTable.modified == true && Session.documents.activeDocument.pathname != Lang.word( 3 ))
             {
-               if (Tabs.current.save())
+               if (Session.documents.activeDocument.save())
                {
-                  Tabs.current.proposalTable.modified = false
+                  Session.documents.activeDocument.proposalTable.modified = false
                   updateTitle()
                }
                else
-                  EHFunctions.saveTab()
+                  saveTab()
             }
             else
-               EHFunctions.saveTab()
-
+               saveTab()
 
          SAVE_AS ->
-            EHFunctions.saveTab()
+            saveTab()
+
+//         SAVE_ENCRYPTED ->
+//            saveTab()
 
          CLOSE ->
-            if (Tabs.current.proposalTable.modified == false)
-               EHFunctions.closeTab()
+            if (Session.documents.activeDocument.proposalTable.modified == false)
+               closeTab()
             else
                if (JOptionPane.showConfirmDialog(tenderEdit, Lang.word( 49 ) + "\n" + Lang.word( 24 ),
                Lang.word( 34 ), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE ) == JOptionPane.YES_OPTION)
-                  EHFunctions.closeTab()
+                  closeTab()
 
          ECONOMIC_RELATIONS ->
          {
@@ -105,8 +109,8 @@ object EventHandler
 
          SAVE_SETTINGS ->
          {
-            KSettings.instance.save()
-            KUsers.instance.save()
+            Session.settings.save()
+            Session.users.save()
          }
 
          GET_UPDATES ->
@@ -114,19 +118,19 @@ object EventHandler
 
          SUBMIT ->
          {
-            Tabs.current.apply {
+            with (Session.documents.activeDocument) {
                if (proposalTable.modified == false)
-                  submit()
+                  println( "commit" )
                else
                   if (JOptionPane.showConfirmDialog(tenderEdit, Lang.word( 49 ) + "\n" + Lang.word( 24 ),
                   Lang.word( 34 ), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE ) == JOptionPane.YES_OPTION)
-                     submit()
+                     println( "commit" )
             }
          }
 
          QUIT ->
          {
-            if (handleModifications())
+            if (warnOnModified())
             {
                tenderEdit.setVisible( false )
                tenderEdit.dispose()
@@ -161,22 +165,23 @@ object EventHandler
          }
 
          ADD ->
-            if (Tabs.current.proposalTable.add())
+            if (Session.documents.activeDocument.proposalTable.add())
             {
-               Tabs.current.proposalTable.modified = true
+               Session.documents.activeDocument.proposalTable.modified = true
                updateTitle()
             }
 
          REMOVE ->
-            if (Tabs.current.proposalTable.remove())
+            if (Session.documents.activeDocument.proposalTable.remove())
             {
-               Tabs.current.proposalTable.modified = true
+               Session.documents.activeDocument.proposalTable.modified = true
                updateTitle()
             }
 
          CLEAR ->
          {
-            with (Tabs.current) {
+            with (Session.documents.activeDocument) {
+               proposal = KProposal()
                proposalTable.vanilla()
                proposalTable.setup()
                updateTitle()
@@ -185,7 +190,7 @@ object EventHandler
          }
 
          HELP ->
-            GUI.info.load( Constants.HELP_DIR + SLASH + "index.html" )
+            GUI.info.load( HELP_DIR + SLASH + "index.html" )
 
          ABOUT ->
             JOptionPane.showMessageDialog( tenderEdit, Lang.word( 301 ), "information", JOptionPane.INFORMATION_MESSAGE )
@@ -197,15 +202,15 @@ object EventHandler
             dmt?.run {
                val selectedObject = (dmt as DefaultMutableTreeNode).getUserObject() as KProductInfo
 
-               val currentRelation = Tabs.current.tender.relation
-               if (currentRelation is KRelation)
+               val relation = Session.documents.activeDocument.relation
+               if (!relation.isVoid() && relation.target > Target.UNDEFINED)
                {
-                  val productsDir = if (currentRelation.target == Target.PRODUCTION)
+                  val productsDir = if (relation.target == Target.PRODUCTION)
                                        "jobinfo"
                                     else
                                        "productinfo"
 
-                  val productsInfoPath = "${Constants.USERS_DIR}${SLASH}${KUsers.instance.current.member.me.name()}${SLASH}$productsDir"
+                  val productsInfoPath = "${USERS_DIR}${SLASH}${Session.users.activeUser.me.info.name}${SLASH}$productsDir"
                   GUI.info.load( "${productsInfoPath}${SLASH}${selectedObject.id}.html" )
                }
             }

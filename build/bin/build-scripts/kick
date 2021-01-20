@@ -1,0 +1,25 @@
+#!/bin/sh
+
+cd /home/projects/kick/current
+
+task="compile"
+if [ $1 ]; then
+   task=$1
+fi
+
+DEPENDENCIES=$COROUTINES:$KROTO_COROUTINES:$GRPC_PROTOBUF:$GRPC_CONTEXT:$GRPC_CORE:$GRPC_STUB:$GRPC_API:$GUAVA:\
+$GRPC_PROTOBUF_LITE:$PROTOBUF_JAVA:$PERFMARK:$GRPC_NETTY_SHADED:$PROTOCOL:$PEN:$PEN_TESTS:$APACHE_COMMON:$IROHA_ED25519
+
+if [ $task = "compile" ]; then
+   kotlinc -d $KICK -cp $DEPENDENCIES src
+
+elif [ $task = "run" ]; then
+   kotlin -cp $KICK:$DEPENDENCIES kick.tests.Main $2
+
+elif [ $task = "docs" ]; then
+   java -cp $STDLIB:$DEPENDENCIES -jar $DOKKA src/jvm -output build/docs/kick/api
+
+else
+   echo "Usage: build sora [compile|tests|run]"; echo
+
+fi

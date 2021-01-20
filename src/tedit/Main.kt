@@ -2,6 +2,8 @@ package tedit
 
 import pen.Log
 import pen.LogLevel
+import tedit.gui.GUI
+import tedit.session.Session
 
 /** The main class. */
 object Main
@@ -40,25 +42,15 @@ object Main
    /** Instanciates settings, users and GUI. */
    private fun start ()
    {
-      Log.info( "Welcome to Tender Edit!" )
+      Log.info( "Starting Tender Edit" )
       try
       {
-         val defaultUser = KSettings.instance.defaultUser
-
-         if (KUsers.instance.userMap.isEmpty())
-            throw Exception( "no users found" )
-         else
-            with( KUsers.instance )
-            {
-               if (defaultUser > 0L && !activate( defaultUser ))
-                  activate( userArray[0] )
-            }
-
-         GUI.createInstance()
+         Session.start()
+         GUI.start()
       }
-      catch (e : Exception)
+      catch (t : Throwable)
       {
-         Log.critical( "Critical exception, (${e.message})" )
+         Log.critical( "Critical exception, (${t.message})" )
          kotlin.system.exitProcess( 1 )
       }
    }
