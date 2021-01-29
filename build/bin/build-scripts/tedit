@@ -12,7 +12,7 @@ DEPENDENCIES=$PEN:$PLUGINS:$PEN_TESTS:$APACHE_COMMON:$IROHA_ED25519
 
 if [ $task = "compile" ]; then
    DEPENDENCIES=$DEPENDENCIES:$SERIAL_RUN
-   cmd-timed "kotlinc -d build/dist/platform/jvm/tedit/tedit.jar -cp $DEPENDENCIES -Xplugin=$SERIAL_PLUG src/tedit"
+   cmd-timed "kotlinc -d build/dist/platform/jvm/tedit/tedit.jar -cp $DEPENDENCIES -Xplugin=$SERIAL_PLUG src"
 
 elif [ $task = "run" ]; then
    echo Running..

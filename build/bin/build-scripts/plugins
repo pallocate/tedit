@@ -1,0 +1,47 @@
+#!/bin/sh
+
+clear
+cd /home/projects/plugins/current
+
+# Print usage
+printUsage () {
+   echo "Usage: $0 task"
+   echo
+   echo "Tasks:"
+   echo "all            tests          api"
+}
+
+PLUGINS_DIR="build/dist/platform/jvm/plugins"
+DEPENDENCIES=$JNA:$PEN:$EXPOSED
+
+task="all"
+if [ $1 ]; then
+   task=$1
+fi
+
+###  All (default)  ###
+if [ $task = "all" ]; then
+   cmd-timed "kotlinc -d . -cp $DEPENDENCIES src/common src/jvm"
+   rm -Rf $PLUGINS_DIR/**
+   mv -f plugins/** $PLUGINS_DIR
+   rm -R plugins
+
+###  Api  ###
+elif [ $task = "api" ]; then
+   echo "Creating api docs.." ; echo
+   java -cp $DEPENDENCIES -jar $DOKKA src/common src/jvm -output build/docs/plugins
+
+###  Tests  ###
+elif [ $task = "tests" ]; then
+   DEPENDENCIES=$JUNIT:$PLUGINS:$PEN_TESTS:$DEPENDENCIES
+   kotlinc -d $PLUGINS_DIR/examples.jar -cp $DEPENDENCIES -Xmulti-platform src/common_tests
+   if [ $? -eq 0 ]; then
+      cmd-timed "kotlinc -d build/dist/platform/jvm/plugins/tests.jar -cp $DEPENDENCIES:$PLUGINS_DIR/examples.jar -Xmulti-platform src/jvm_tests"
+   fi
+
+else
+   printUsage
+
+fi
+echo
+

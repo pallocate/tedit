@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<product desc="Any job" id="100001" name="Job" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="products.xsd">
+
+    <product id="1" name="University" desc="Formosa heights university">
+        <product id="86121721" name="Fine Arts" desc="Fine arts studies" amount="1.0" unit="Hour" price="30" />
+        <product id="86121722" name="Art history" desc="Studies in art history" amount="1.0" unit="Hour" price="95" />
+        <product id="86121723" name="Sculpture" desc="Sculpture craft studies" amount="1.0" unit="Hour" price="20" />
+        <product id="86121715" name="Music theory" desc="Music theory studies" amount="1.0" unit="Hour" price="85" />
+        <product id="94100001" name="Meetings" desc="Council meetings." amount="1.0" unit="Hour" price="150" />
+    </product>
+
+</product>

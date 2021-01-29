@@ -1,0 +1,31 @@
+#!/bin/sh
+
+cd /home/projects/sim/current
+
+task="all"
+if [ $1 ]; then
+   task=$1
+fi
+
+SIM_JAR="build/dist/platform/jvm/sim/sim.jar"
+DEPENDENCIES=$PEN:$KAD:$JNA
+
+if [ $task = "all" ]; then
+   cmd-timed "kotlinc -d $SIM_JAR -cp $DEPENDENCIES:$REFLECT src"
+
+elif [ $task = "run" ]; then
+   echo Running..
+   kotlin -cp $SIM_JAR:$DEPENDENCIES:$SERIAL_RUN:$COROUTINES sim.Main $2
+
+elif [ $task = "api" ]; then
+   clear
+   echo "Creating api docs.." ; echo
+   java -cp $STDLIB -jar $DOKKA src -output build/docs/sim
+
+else
+   echo "Usage: $0 task"
+   echo
+   echo "Tasks:"
+   echo "all            run            api"
+fi
+echo

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<product desc="Any job" id="100001" name="Job" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="products.xsd">
+
+    <product id="5" name="Factory" desc="Work at the furniture factory">
+        <product id="73120001" name="Machine operator" desc="Furniture machine operator" amount="1.0" unit="Hour" price="650"/>
+        <product id="73120002" name="Machine cleaning" desc="Weekly cleaning of the machine" amount="1.0" unit="Hour" price="900"/>
+        <product id="94100001" name="Meetings" desc="Council meetings." amount="1.0" unit="Hour" price="150"/>
+    </product>
+
+</product>

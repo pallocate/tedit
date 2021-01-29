@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<product desc="Anything in the economy." id="100035" name="Product" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="products.xsd">
+
+   <product id="101000" name="Utility">
+      <product id="83101800" name="Electricity" desc="Electric power" prefix="kilo" unit="joule" price="35" />
+      <product id="78100000" name="Transport" desc="Hub system, logistic" prefix="kilo" unit="gram" price="112" />
+      <product id="85101500" name="Medical care" desc="Hospital" unit="hour" price="0" />
+   </product>
+
+   <product id="102000" name="Basic">
+      <product id="50001000" name="Materials">
+         <product id="11121710" name="Charcoal" desc="Charcoal fuel" unit="tonne" price="95000" />
+         <product id="30000000" name="Plank" desc="Construction material" unit="metre" price="50" />
+         <product id="14110000" name="Paper" desc="Paper roll" unit="piece" price="1700" />
+         <product id="11161805" name="Rayon" desc="Rayon textile" unit="metre" price="30" />
+         <product id="11162300" name="Leather" desc="Leather material" unit="metre_2" price="460" />
+         <product id="11161600" name="Wool textile" desc="Wool textile" unit="metre" price="60" />
+      </product>
+
+      <product id="50001000" name="Food">
+
+         <product id="50101538" name="Vegetables" desc="Vegetable crops" analogue="true" prefix="kilo" unit="gram" price="65" change="-15">
+            <product id="50101502" name="Potatoes" desc="Potatoes" prefix="kilo" unit="gram" price="65" change="-15" />
+            <product id="50101503" name="Cabbage" desc="Cabbage" prefix="kilo" unit="gram" price="65" change="-15" />
+            <product id="50101504" name="Pumpkins" desc="Pumpkins" prefix="kilo" unit="gram" price="65" change="-15" />
+         </product>
+         <product id="50111000" name="Meat" desc="Freash meat">
+            <product id="50111512" name="Pork" desc="Pork meat" prefix="kilo" unit="gram" price="300" />
+            <product id="50111513" name="Cheep" desc="Cheep meat" prefix="kilo" unit="gram" price="400" />
+            <product id="50111514" name="Beef" desc="Beef meat" prefix="kilo" unit="gram" price="600" />
+         </product>
+         <product id="50001001" name="Other">
+            <product id="50221100" name="Flour" desc="Silted ground cereal" prefix="kilo" unit="gram" price="40" />
+            <product id="50121500" name="Fish" desc="Freash fish" prefix="kilo" unit="gram" price="260" />
+            <product id="50101541" name="Mushrooms" desc="Freash mushrooms" prefix="kilo" unit="gram" price="200" />
+         </product>
+
+      </product>
+   </product>
+
+   <product id="103000" name="Derived">
+      <product id="55101504" name="News paper" desc="Printed publication" unit="piece" price="40" />
+      <product id="27112005" name="Axe" desc="Sharp axe" unit="piece" price="800" />
+      <product id="27112002" name="Spade" desc="Digging spade" unit="piece" price="850" />
+      <product id="50181901" name="Bread" desc="A fresh bread" unit="piece" price="75" />
+      <product id="50182001" name="Pumpkin pie" desc="A pumpkin pie" unit="piece" price="100" />
+      <product id="53101500" name="Trousers" desc="Q-Design, trousers" unit="piece" price="500" />
+      <product id="53101604" name="Blous" desc="Q-Design, blous" unit="piece" price="450" />
+      <product id="53103000" name="Sweater" desc="Q-Design, sweater" unit="piece" price="400" />
+      <product id="56101515" name="Bed" desc="A wooden bed " unit="piece" price="10000" />
+      <product id="56101519" name="Table" desc="Birch wood table" unit="piece" price="5000" />
+   </product>
+
+   <product id="104000" name="Services" analogue="true" unit="hour" price="950">
+      <product id="91100000" name="Hair cut" desc="A hair cut at the barber" unit="hour" price="950" />
+      <product id="72100000" name="Repairs" desc="Repairs and maintenance" unit="hour" price="950" />
+      <product id="90101500" name="Restaurant meal" desc="A meal at the restaurant"  unit="hour" price="950" />
+   </product>
+
+</product>

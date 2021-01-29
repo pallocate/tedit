@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<product desc="Any job" id="100001" name="Job" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="products.xsd">
+
+    <product desc="The Farmland cooperative" id="7" name="Farmland coop">
+        <product id="70140000" name="Weeding" desc="Crop field weeding" amount="1.0" unit="Hour" price="700"/>
+        <product id="70130000" name="Earth works" desc="Land and soil preparation" amount="1.0" unit="Hour" price="350"/>
+        <product id="70130001" name="Compost manager" desc="Managing the compost operation" amount="1.0" unit="Hour" price="65"/>
+        <product id="70130002" name="Fencing" desc="Assembly and mounting of fences" amount="1.0" unit="Hour" price="300"/>
+        <product id="94100001" name="Meetings" desc="Council meetings." amount="1.0" unit="Hour" price="150"/>
+    </product>
+
+</product>

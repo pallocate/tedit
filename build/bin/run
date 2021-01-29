@@ -1,0 +1,13 @@
+#!/bin/sh
+
+cd /home/projects/build/bin/build-scripts
+
+case $1 in
+   "tedit" | "sim" | "kick")
+      ./$1 run $2 $3
+   ;;
+
+   *)
+      echo "Usage: run [tedit|sim|kick]"
+   ;;
+esac

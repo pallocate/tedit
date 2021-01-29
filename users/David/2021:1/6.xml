@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<product desc="" id="100001" name="Job" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="products.xsd">
+
+   <product id="6" name="Hospital" desc="Formosa heights Hospital">
+      <product id="76110000" name="Cleaning" desc="Hospital cleaning and sterilization" amount="1.0" unit="Hour" price="800"/>
+      <product id="94100001" name="Meetings" desc="Council meetings." amount="1.0" unit="Hour" price="150"/>
+   </product>
+
+</product>

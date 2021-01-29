@@ -2,12 +2,32 @@
    font-family: monospace;
 }
 
-h2 {
-   color: #19392C;
+.box {
+   padding: 0px 4px 15px 8px;
+   border: 1px solid black;
+}
+
+.ref {
+   font-size: 11px;
+}
+
+.main {
+   padding: 0px 10px;
+}
+
+h1 {
    font-family: sans-serif;
+   font-size: 16px;
+   font-weight: normal;
+   color: #19392C;
    text-align: center;
+   margin: 3px 0px 6px;
+   padding: 0px;
  }
 
-h3 {
+h2 {
+   font-size: 12px;
    color: #213919;
+   margin: 15px 0px 0px 0px;
+   padding: 0px;
 }
