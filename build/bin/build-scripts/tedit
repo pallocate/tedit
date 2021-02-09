@@ -17,7 +17,7 @@ if [ $task = "compile" ]; then
 elif [ $task = "run" ]; then
    echo Running..
    DEPENDENCIES=$JNA:$SERIAL_RUN:$TEDIT:$DEPENDENCIES
-   kotlin -cp $DEPENDENCIES tedit.Main $2
+   kotlin -cp $DEPENDENCIES tedit.Main $2 $3 $4 $5
 
 elif [ $task = "docs" ]; then
    clear

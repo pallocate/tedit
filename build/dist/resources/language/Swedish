@@ -1,8 +1,11 @@
 3: namnlös
 5: Klar
 7: Töm
+8: Ja
+9: Nej
 10: Ok
 11: Avbryt
+12: Avsluta
 14: Arkiv
 15: Importera
 16: Ny tender
@@ -24,18 +27,18 @@
 45: ID
 46: Pris
 48: Antal
-49: Det finns osparade ändringar.
-69: finns redan
-71: Avsluta
-72: Vill du skriva över
-73: Det gick inte att spara
-74: Fel!
+49: är inte sparad
+50: Spara till vald fil
+69: finns redan.
+71: Vill du spara den innan du avslutar?
+72: Vill du skriva över den?
+73: kunde inte sparas
+74: ERROR
 
 100: Konsumtion
 101: Produktion
 
-205: Användare
-206: Relation
+206: Välj en relation
 208: Produkter
 223: Produkt
 242: Inkludera beskrivning

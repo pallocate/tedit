@@ -2,7 +2,9 @@ package tedit
 
 import pen.Log
 import pen.LogLevel
+import pen.toLong
 import tedit.gui.GUI
+import tedit.session.activateUser
 import tedit.session.Session
 
 /** The main class. */
@@ -12,46 +14,52 @@ object Main
    @JvmStatic
    fun main (args : Array<String>)
    {
-      if (args.size > 0)
-         when (args[0])
+      val userId = if (args.size == 0)
+         0L
+      else
+      {
+         for (arg in args)
          {
-            "-d" ->  // Debug
+            when (arg)
             {
-               Log.level = LogLevel.DEBUG
-               start()
-            }
-
-            "-q" ->  // Quiet
-            {
-               Log.level = LogLevel.QUIET
-               start()
-            }
-
-            else ->  // Print usage
-            {
-               println( "tedit" )
-               println( "tedit -d         Debug" )
-               println( "tedit -q         Quiet" )
-               println( "tedit -h         Show help" )
+               "-d" -> Log.level = LogLevel.DEBUG
+               "-q" -> Log.level = LogLevel.QUIET
+               "-h" -> printUsageAndExit()
+               else -> {}
             }
          }
-      else
-          start()
+
+         args.last().toLong( 0L )
+      }
+
+      val user = activateUser( userId )
+      if (!user.isVoid())
+      {
+         Lang.activate( user.language )
+         Session.user = user
+         startGUI()
+      }
    }
 
-   /** Instanciates settings, users and GUI. */
-   private fun start ()
+   private fun startGUI ()
    {
       Log.info( "Starting Tender Edit" )
       try
-      {
-         Session.start()
-         GUI.start()
-      }
+      { GUI.start() }
       catch (t : Throwable)
       {
          Log.critical( "Critical exception, (${t.message})" )
          kotlin.system.exitProcess( 1 )
       }
+   }
+
+   private fun printUsageAndExit ()
+   {
+      println( "Usage: tedit [OPTION]... [USER_ID]\n" )
+      println( "Options are:" )
+      println( "  -d     Debug" )
+      println( "  -q     Quiet" )
+      println( "  -h     Show this help" )
+      kotlin.system.exitProcess( 0 )
    }
 }

@@ -62,7 +62,7 @@ class KToolbar (hamburgerButton : AbstractButton) : JToolBar(), ActionListener
       button.setBorder( null )
       button.setToolTipText( Lang.word( 354 ) )
       button.addActionListener( this )
-      button.setActionCommand( EventHandler.SUBMIT )
+      button.setActionCommand( EventHandler.COMMIT )
       add( button )
 
       addSeparator(Dimension( 21, 24 ))

@@ -24,9 +24,8 @@ class KSettings ()
       }
    }
 
-   private val progress                                        = "2021:1"
+   private val progress                                = "2021:1"
    val toolbar                                         = true
-   val defaultUser                                     = 0L
 
    fun progression () : String
    {

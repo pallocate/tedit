@@ -49,7 +49,7 @@ class KMenu () : JMenuBar(), ActionListener
 
       menuItem = JMenuItem(Lang.word( 302 ))
       menuItem.addActionListener( this )
-      menuItem.setActionCommand( EventHandler.SUBMIT )
+      menuItem.setActionCommand( EventHandler.COMMIT )
       ret.add( menuItem )
 
       ret.addSeparator()
@@ -59,7 +59,7 @@ class KMenu () : JMenuBar(), ActionListener
       menuItem.setActionCommand( EventHandler.CLOSE )
       ret.add( menuItem )
 
-      menuItem = JMenuItem(Lang.word( 71 ))
+      menuItem = JMenuItem(Lang.word( 12 ))
       menuItem.addActionListener( this )
       menuItem.setActionCommand( EventHandler.QUIT )
       ret.add( menuItem )
@@ -113,10 +113,10 @@ class KMenu () : JMenuBar(), ActionListener
       val ret = JMenu(Lang.word( 21 ))
       var menuItem : JMenuItem
 
-      menuItem = JMenuItem(Lang.word( 330 ))
+      menuItem = JMenuItem(Lang.word( 303 ) )
       menuItem.addActionListener( this )
-      menuItem.setActionCommand( EventHandler.ECONOMIC_RELATIONS )
-      ret.add( menuItem )
+      menuItem.setActionCommand( EventHandler.SAVE_SETTINGS )
+      ret.add( menuItem );
 
       menuItem = JMenuItem(Lang.word( 27 ))
       menuItem.setEnabled( false )
@@ -124,7 +124,7 @@ class KMenu () : JMenuBar(), ActionListener
       ret.add( menuItem )
 
       menuItem = JMenuItem(Lang.word( 331 ))
-      menuItem.addActionListener( this )
+      menuItem.setEnabled( false )
       menuItem.setActionCommand( EventHandler.ACCOUNT_EDIT )
       ret.add( menuItem )
 

@@ -1,17 +1,13 @@
 package tedit
 
 import javax.swing.JOptionPane
-import javax.swing.JFileChooser
-import pen.Log
 import pen.eco.Target
-import pen.eco.KProposal
 import tedit.utils.Constants.SLASH
 import tedit.utils.Constants.USERS_DIR
 import tedit.Lang
 import tedit.session.Session
 import tedit.session.KTenderDocument
 import tedit.gui.GUI
-import tedit.gui.KRelationSelector
 
 /** Sets the title according to file name and modification status. */
 internal fun updateTitle ()
@@ -29,19 +25,7 @@ internal fun updateTitle ()
    GUI.frame.setTitle( title )
 }
 
-internal fun progressPath () = USERS_DIR + SLASH + Session.users.activeUser.me.info.name + SLASH + Session.settings.progression()
-
-/** Alerts user about unsaved documents. */
-internal fun warnOnModified () : Boolean
-{
-   var procede = true
-
-   if (Session.documents.unsaved().size > 0)
-      procede = (JOptionPane.showConfirmDialog( GUI.frame, Lang.word( 49 ) + "\n" + Lang.word( 24 ),
-      Lang.word( 34 ), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE ) == JOptionPane.YES_OPTION)
-
-   return procede
-}
+internal fun progressPath () = USERS_DIR + SLASH + Session.user.me.info.name + SLASH + Session.settings.progression()
 
 internal fun showProductInfo (productId : String)
 {
@@ -54,108 +38,40 @@ internal fun showProductInfo (productId : String)
          else
             "productinfo"
 
-      val productInfoPath = "${USERS_DIR}${SLASH}${Session.users.activeUser.me.info.name}${SLASH}$productsDir"
+      val productInfoPath = "${USERS_DIR}${SLASH}${Session.user.me.info.name}${SLASH}$productsDir"
       GUI.info.load( "${productInfoPath}${SLASH}${productId}.html" )
    }
 }
 
-internal fun openTab ()
+/** Informs about unsaved document and lets the user choose what to do. */
+internal fun optionalSave (unsavedDocument : KTenderDocument) : Boolean
 {
-   val fileChooser = GUI.fileChooser
-   fileChooser.setDialogTitle( "Open" )
-   fileChooser.setApproveButtonText( "Open" )
+   var procede = true
+   val buttonTexts = arrayOf( Lang.word( 18 ), Lang.word( 9 ), Lang.word( 11 ) )
+   val choise = JOptionPane.showOptionDialog( GUI.frame, "\"${unsavedDocument.filename()}\" ${Lang.word(49)}\n${Lang.word(71)}", 
+   Lang.word( 34 ), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, buttonTexts, buttonTexts[2]);
 
-   if (fileChooser.showOpenDialog( GUI.frame ) == JFileChooser.APPROVE_OPTION)
-   {
-      val selectedFile = fileChooser.getSelectedFile()
-      val pathname = selectedFile.getAbsolutePath()
-      val filename = fileChooser.getName( selectedFile )
+   if (choise == JOptionPane.YES_OPTION)
+      procede = saveDocument( unsavedDocument )
+   else
+      if (choise == JOptionPane.CANCEL_OPTION)
+         procede = false
 
-      if (selectedFile.exists())
-      {
-         if (pathname.endsWith( ".tdr" ))
-         {
-            val document = KTenderDocument().apply {load( pathname )}
-            val tab = document.proposalTable.tab
-
-            GUI.tabs.addTab( filename, tab )
-            GUI.tabs.setSelectedComponent( tab )
-
-            document.proposalTable.setup()
-            updateTitle()
-         }
-         else
-            Log.warn( "Open tender failed! (unspported file format)" )
-      }
-   }
+   return procede
 }
 
-/** Removes/clear the currently selected tab. */
-internal fun closeTab ()
+/** Tries to save document, shows error message if it fails. */
+internal fun actualSave (document : KTenderDocument) : Boolean
 {
-   if (GUI.tabs.getTabCount() > 1)
+   val success = document.save()
+   if (success)
    {
-      GUI.tabs.remove( GUI.tabs.activeTab )
-      Session.documents.documentList.remove( Session.documents.activeDocument )
+      document.proposalTable.modified = false
+      GUI.tabs.setTitleAt( GUI.tabs.selectedIndex, document.filename() )
       updateTitle()
    }
    else
-   {
-      with (Session.documents.activeDocument) {
-         proposal = KProposal()
-         proposalTable.vanilla()
-         pathname = Lang.word( 3 )
-         proposalTable.setup()
-      }
-      updateTitle()
-   }
-}
+      JOptionPane.showMessageDialog(GUI.frame, "\"${document.filename()}\" ${Lang.word(73)}", Lang.word( 74 ), JOptionPane.ERROR_MESSAGE )
 
-internal fun saveTab ()
-{
-   val tenderEdit = GUI.frame
-   val fileChooser = GUI.fileChooser
-   fileChooser.setDialogTitle( "Save" )
-   fileChooser.setApproveButtonText( "Save" )
-
-   val selectedTab = GUI.tabs.getSelectedIndex()
-   if (selectedTab >= 0)
-   {
-      val result1 = fileChooser.showSaveDialog( tenderEdit )
-      if (result1 == JFileChooser.APPROVE_OPTION)
-      {
-         val document = Session.documents.activeDocument
-         val selectedFile = fileChooser.selectedFile
-         val name = fileChooser.getName( selectedFile )
-         document.pathname = selectedFile.absolutePath
-
-         if (selectedFile.exists())
-         {
-            val result2 = JOptionPane.showConfirmDialog( tenderEdit, " \"" + name + "\" " + Lang.word( 69 ) +
-            "!\n" + Lang.word( 72 ) + " ?", Lang.word( 34 ), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE )
-            if (result2 == JOptionPane.YES_OPTION)
-            {
-               if (document.save())
-               {
-                  document.proposalTable.modified = false
-                  GUI.tabs.setTitleAt( selectedTab, name )
-                  updateTitle()
-               }
-               else
-                  JOptionPane.showMessageDialog(tenderEdit, Lang.word( 73 ) + " " + name, Lang.word( 74 ), JOptionPane.ERROR_MESSAGE )
-            }
-         }
-         else
-         {
-            if (document.save())
-            {
-               Session.documents.activeDocument.proposalTable.modified = false
-               GUI.tabs.setTitleAt(selectedTab, name)
-               updateTitle()
-            }
-            else
-               JOptionPane.showMessageDialog(tenderEdit, Lang.word( 73 ) + " " + document.pathname, Lang.word( 74 ), JOptionPane.ERROR_MESSAGE )
-         }
-      }
-   }
+   return success
 }

@@ -1,8 +1,11 @@
 3: untitled
 5: Ready
 7: Clear
+8: Yes
+9: No
 10: OK
 11: Cancel
+12: Quit
 14: File
 15: Import
 16: New tender
@@ -24,18 +27,18 @@
 45: Id
 46: Price
 48: Qty
-49: There are unsaved modifications.
-69: already exists
-71: Quit
-72: Do you want to overwrite it
-73: Could not save
-74: ERROR!
+49: is not saved.
+50: Save to selected file
+69: already exists.
+71: Do you want to save it before closing?
+72: Do you want to replace it?
+73: could not be saved.
+74: ERROR
 
 100: Consumption
 101: Production
 
-205: User
-206: Relation
+206: Choose a relation
 208: Products
 223: Product
 242: Include description
@@ -43,9 +46,9 @@
 253: Remove product
 
 301: Tender Edit
-302: Submit
+302: Commit
 303: Save settings
 330: Choose relation
 331: Edit account
 352: Add choosen product
-354: Submit your proposal
+354: Commit your proposal
