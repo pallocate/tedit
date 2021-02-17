@@ -32,13 +32,9 @@ internal fun newDocument ()
    }
 }
 
-
 internal fun openDocument ()
 {
-   val fileChooser = GUI.fileChooser
-   fileChooser.setDialogTitle(Lang.word( 17 ))
-   fileChooser.setApproveButtonText(Lang.word( 17 ))
-
+   val fileChooser = GUI.fileChooser( FileCooserMode.OPEN )
    if (fileChooser.showOpenDialog( GUI.frame ) == JFileChooser.APPROVE_OPTION)
    {
       val selectedFile = fileChooser.getSelectedFile()
@@ -96,30 +92,37 @@ internal fun saveDocument (document : KTenderDocument) : Boolean
 internal fun saveDocumentAs (document : KTenderDocument) : Boolean
 {
    var success = false
-   val fileChooser = GUI.fileChooser
-   fileChooser.dialogTitle = Lang.word( 19 )
-   fileChooser.approveButtonText = Lang.word( 18 )
-   fileChooser.approveButtonToolTipText = Lang.word( 50 )
+   val choosenFile = chooseFile()
 
-   val result1 = fileChooser.showSaveDialog( GUI.frame )
-   if (result1 == JFileChooser.APPROVE_OPTION)
+   if (choosenFile !is VoidFile)
    {
-      val selectedFile = fileChooser.selectedFile
-      val name = fileChooser.getName( selectedFile )
+      document.pathname = choosenFile.absolutePath
+      val name = choosenFile.name
 
-      document.pathname = selectedFile.absolutePath
-
-      if (selectedFile.exists())
+      if (choosenFile.exists())
       {
-         val buttonTexts = arrayOf( Lang.word( 8 ), Lang.word( 9 ) )
-         val result2 = JOptionPane.showOptionDialog( GUI.frame, " \"$name\" ${Lang.word(69)}\n${Lang.word(72)}",
-            Lang.word( 34 ), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, buttonTexts, buttonTexts[1] )
-
-         if (result2 == JOptionPane.YES_OPTION)
+         if (overwriteAccept( choosenFile ))
             success = actualSave( document )
       }
       else
          success = actualSave( document )
    }
+
    return success
+}
+
+internal fun exportEncrypted (document : KTenderDocument)
+{
+   val choosenFile = chooseFile( true )
+
+   if (choosenFile !is VoidFile)
+   {
+      if (choosenFile.exists())
+      {
+         if (overwriteAccept( choosenFile ))
+            document.saveEncrypted( choosenFile.name )
+      }
+      else
+         document.saveEncrypted( choosenFile.name )
+   }
 }

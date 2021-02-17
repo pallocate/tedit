@@ -8,6 +8,7 @@ import javax.swing.JFileChooser
 import javax.swing.filechooser.FileNameExtensionFilter
 import javax.swing.border.LineBorder
 import tedit.utils.KProductTree
+import tedit.FileCooserMode
 import tedit.Lang
 
 /** GUI starting point and some miscellany references */
@@ -18,9 +19,39 @@ object GUI
    internal val productTree                                     = KProductTree( KTreeSelectionHandler(), KMouseHandler() )
    internal val info                                            = KInfo()
    internal val hamburgerMenu                                   = KHamburgerMenu()
-   internal val fileChooser                                     = JFileChooser(File( "." )).apply {
+   private val _fileChooser                                     = JFileChooser(File( "." ))
+
+   internal fun fileChooser (mode : FileCooserMode) = _fileChooser.apply {
+
       resetChoosableFileFilters()
-      setFileFilter(FileNameExtensionFilter( "Economic tender", "tdr" ))
+      when (mode)
+      {
+         FileCooserMode.OPEN ->
+         {
+            dialogTitle = Lang.word( 17 )
+            approveButtonText = Lang.word( 17 )
+            fileFilter = FileNameExtensionFilter( "Tender document", "tdr" )
+         }
+
+         FileCooserMode.SAVE_AS ->
+         {
+            dialogTitle = Lang.word( 19 )
+            approveButtonText = Lang.word( 18 )
+            approveButtonToolTipText = Lang.word( 18 ) + " " + Lang.word( 50 )
+            fileFilter = FileNameExtensionFilter( "Tender document", "tdr" )
+         }
+
+         FileCooserMode.EXPORT ->
+         {
+            dialogTitle = Lang.word( 304 )
+            approveButtonText = Lang.word( 304 )
+            approveButtonToolTipText = Lang.word( 304 ) + " " + Lang.word( 50 )
+            fileFilter = FileNameExtensionFilter( "Encrypted tender", "etr" )
+         }
+
+      }
+
+      selectedFile = File( "." )
       setAcceptAllFileFilterUsed( true )
    }
 

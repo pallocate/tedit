@@ -49,7 +49,7 @@ class KMenu () : JMenuBar(), ActionListener
 
       menuItem = JMenuItem(Lang.word( 302 ))
       menuItem.addActionListener( this )
-      menuItem.setActionCommand( EventHandler.COMMIT )
+      menuItem.setActionCommand( EventHandler.EXPORT_ENCRYPTED )
       ret.add( menuItem )
 
       ret.addSeparator()

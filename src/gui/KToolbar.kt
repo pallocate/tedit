@@ -58,11 +58,11 @@ class KToolbar (hamburgerButton : AbstractButton) : JToolBar(), ActionListener
 
       addSeparator(Dimension( 7, 24 ))
       button = JButton()
-      button.setIcon(ImageIcon( "${ICONS_DIR}${SLASH}emblem-default.png" ))
+      button.setIcon(ImageIcon( "${ICONS_DIR}${SLASH}changes-prevent.png" ))
       button.setBorder( null )
       button.setToolTipText( Lang.word( 354 ) )
       button.addActionListener( this )
-      button.setActionCommand( EventHandler.COMMIT )
+      button.setActionCommand( EventHandler.EXPORT_ENCRYPTED )
       add( button )
 
       addSeparator(Dimension( 21, 24 ))

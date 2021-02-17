@@ -28,7 +28,7 @@
 46: Price
 48: Qty
 49: is not saved.
-50: Save to selected file
+50: selected file
 69: already exists.
 71: Do you want to save it before closing?
 72: Do you want to replace it?
@@ -46,9 +46,10 @@
 253: Remove product
 
 301: Tender Edit
-302: Commit
+302: Export encrypted
 303: Save settings
+304: Export
 330: Choose relation
 331: Edit account
 352: Add choosen product
-354: Commit your proposal
+354: Export the proposal encrypted

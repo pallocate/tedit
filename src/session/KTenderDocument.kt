@@ -29,24 +29,28 @@ class KTenderDocument (internal var proposal : KProposal, internal var relation 
       return tender.proposer
    }
 
-   internal fun save (encrypt : Boolean = false) : Boolean
+   internal fun saveEncrypted (filename : String)
+   {
+      val tender = KTender( proposal, relation.other.id, Session.user.me.id )
+      try
+      {
+         val passwordPopup = KPasswordPopup()
+         val encryptor = Session.user.me.crypto( passwordPopup )
+
+         tender.write( filename, encryptor )
+      }
+      catch (e : Exception)
+      { Log.warn( e.message ?: "Export encrypted failed!" ) }
+   }
+
+   internal fun save () : Boolean
    {
       var success = false
       val tender = KTender( proposal, relation.other.id, Session.user.me.id )
 
       try
       {
-         if (encrypt)
-         {
-            val passwordPopup = KPasswordPopup()
-            val othersPublicKey = ByteArray( 0 )
-            val encryptor = Session.user.me.crypto( passwordPopup, othersPublicKey )
-
-            tender.write( pathname, encryptor )
-         }
-         else
-            tender.write( pathname )
-
+         tender.write( pathname )
          success = true
       }
       catch (e : Exception)
@@ -63,7 +67,6 @@ class KTenderDocument (internal var proposal : KProposal, internal var relation 
       catch (e : Exception) {}
 
       return ret
-
    }
 
    fun isPathSet () = pathname != Lang.word( 3 )

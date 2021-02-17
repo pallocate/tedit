@@ -21,6 +21,7 @@ object EventHandler
    val OPEN                                    = "OPEN"
    val SAVE                                    = "SAVE"
    val SAVE_AS                                 = "SAVE_AS"
+   val EXPORT_ENCRYPTED                        = "EXPORT_ENCRYPTED"
    val CLOSE                                   = "CLOSE"
    val CLEAR                                   = "CLEAR"
    val QUIT                                    = "QUIT"
@@ -32,7 +33,6 @@ object EventHandler
    val TREE_SELECTION                          = "TREE_SELECTION"
    val ADD                                     = "ADD"
    val REMOVE                                  = "REMOVE"
-   val COMMIT                                  = "COMMIT"
    val SAVE_SETTINGS                           = "SAVE_SETTINGS"
    val GET_UPDATES                             = "GET_UPDATES"
    val ACCOUNT_EDIT                            = "ACCOUNT_EDIT"
@@ -60,6 +60,9 @@ object EventHandler
             if (activeDocument.isModified() || !activeDocument.isPathSet())
                saveDocumentAs( activeDocument )
 
+         EXPORT_ENCRYPTED ->
+            exportEncrypted( activeDocument )
+
          CLOSE ->
             if (activeDocument.isModified())
             {
@@ -68,9 +71,6 @@ object EventHandler
             }
             else
                closeDocument( activeDocument )
-
-         COMMIT ->
-            println( COMMIT )
 
          QUIT ->
          {

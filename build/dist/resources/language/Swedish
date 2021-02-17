@@ -28,7 +28,7 @@
 46: Pris
 48: Antal
 49: är inte sparad
-50: Spara till vald fil
+50: vald fil
 69: finns redan.
 71: Vill du spara den innan du avslutar?
 72: Vill du skriva över den?
@@ -46,9 +46,10 @@
 253: Ta bort produkt
 
 301: Tender Editor
-302: Skicka in
+302: Exportera krypterad
 303: Spara inställningar
+304: Exportera
 330: Välj relation
 331: Redogörelse
 352: Lägg till vald produkt
-354: Skicka in ditt förslag
+354: Exportera förslaget krypterat
