@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import pen.deserializeFromFile
 import pen.serializeToFile
 import pen.toInt
-import tedit.utils.Constants.SETTINGS_FILE
+import tedit.utils.settingsFile
 
 /** Application settings. */
 @Serializable
@@ -15,7 +15,7 @@ class KSettings ()
       internal fun load () : KSettings
       {
          var ret = KSettings()
-         val obj = deserializeFromFile<KSettings>( SETTINGS_FILE, serializer() )
+         val obj = deserializeFromFile<KSettings>( settingsFile.toString(), serializer() )
 
          if (obj is KSettings)
             ret = obj
@@ -27,6 +27,7 @@ class KSettings ()
    private val progress                                = "2021:1"
    val toolbar                                         = true
 
+   /** Does a crude format validation before returning the progress. */
    fun progression () : String
    {
       var ret = "2021:1"
@@ -41,5 +42,5 @@ class KSettings ()
    fun year () = progression().substringBefore( ':' ).toInt()
 
    /** Saves settings to file. */
-   internal fun save () = serializeToFile<KSettings>( this, SETTINGS_FILE, serializer() )
+   internal fun save () = serializeToFile<KSettings>( this, settingsFile.toString(), serializer() )
 }

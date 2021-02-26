@@ -2,8 +2,8 @@ package tedit.session
 
 class KDocuments
 {
-   internal var activeDocument                                  = KTenderDocument.void()
-   internal val documentList                                    = ArrayList<KTenderDocument>()
+   internal var activeDocument = KTenderDocument.void()
+   internal val documentList = ArrayList<KTenderDocument>()
 
    internal fun activate ( tenderDocument : KTenderDocument )
    {
@@ -13,7 +13,7 @@ class KDocuments
    /** @return A list of unsaved documents. */
    internal fun unsaved () = documentList.filter { it.proposalTable.modified }
 
-   /** @return A list of unsaved documents. */
+   /** Searches document list for a document with a matching pathname. */
    internal fun findOpen (pathname : String) : KTenderDocument
    {
       var ret = KTenderDocument.void()

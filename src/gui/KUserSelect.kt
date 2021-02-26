@@ -5,8 +5,9 @@ import javax.swing.ImageIcon
 import javax.swing.DefaultComboBoxModel
 import javax.swing.JComboBox
 import pen.par.KUser
-import tedit.utils.Constants
+import tedit.utils.iconsDir
 
+/** A user selection dialog. */
 class KUserSelect (users : List<KUser>) : SelectionDialog( null, "Select user" )
 {
    override protected val TEXT                         = "Who are you?"
@@ -15,7 +16,7 @@ class KUserSelect (users : List<KUser>) : SelectionDialog( null, "Select user" )
    init
    {
       selectionCombo.setModel(DefaultComboBoxModel( users.toTypedArray<KUser>() ))
-      setIconImage(ImageIcon( Constants.ICONS_DIR + Constants.SLASH + "avatar-default.png" ).getImage())
+      setIconImage(ImageIcon(iconsDir.resolve( "avatar-default.png" ).toString()).getImage())
       defaultSetup()
    }
 
@@ -27,11 +28,12 @@ class KUserSelect (users : List<KUser>) : SelectionDialog( null, "Select user" )
 
    fun selectedUser () : KUser
    {
+      var ret = KUser.void()
       val selected = selectionCombo.getSelectedItem()
 
-      return if (selected is KUser)
-         selected
-      else
-         KUser.void()
+      if (selected is KUser)
+         ret = selected
+
+      return ret
    }
 }

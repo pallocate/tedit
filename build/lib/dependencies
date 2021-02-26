@@ -16,7 +16,6 @@ grpc-api-1.32.1.jar
 grpc-core-1.32.1.jar
 netty-codec-http2-4.1.51.Final.jar
 perfmark-api-0.19.0.jar
-javax.annotation-api-1.2.jar
 dokka-fatjar-0.9.18.jar
 junit-jupiter-api-5.4.2.jar
 junit-platform-console-standalone-1.4.2.jar

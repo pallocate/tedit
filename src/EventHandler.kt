@@ -1,5 +1,6 @@
 package tedit
 
+//import java.io.File
 import javax.swing.JCheckBox
 import javax.swing.JOptionPane
 import javax.swing.JLabel
@@ -7,12 +8,10 @@ import javax.swing.tree.DefaultMutableTreeNode
 import pen.eco.Target
 import pen.eco.KProposal
 import pen.eco.KProductInfo
-import tedit.utils.Constants.SLASH
-import tedit.utils.Constants.HELP_DIR
-import tedit.utils.Constants.USERS_DIR
 import tedit.session.Session
 import tedit.session.KTenderDocument
 import tedit.gui.GUI
+import tedit.utils.helpDir
 
 /** A central place to handle events. */
 object EventHandler
@@ -141,7 +140,7 @@ object EventHandler
          }
 
          HELP ->
-            GUI.info.load( HELP_DIR + SLASH + "index.html" )
+            GUI.info.load(helpDir.resolve( "index.html" ).toFile())
 
          ABOUT ->
             JOptionPane.showMessageDialog( tenderEdit, Lang.word( 301 ), "information", JOptionPane.INFORMATION_MESSAGE )

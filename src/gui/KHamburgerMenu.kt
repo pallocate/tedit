@@ -8,9 +8,9 @@ import javax.swing.JButton
 import javax.swing.AbstractButton
 import javax.swing.JMenuItem
 import javax.swing.border.BevelBorder
-import tedit.utils.Constants
 import tedit.EventHandler
 import tedit.Lang
+import tedit.utils.iconsDir
 
 /** The "hamburger" menu in simple mode. */
 class KHamburgerMenu () : JPopupMenu(), ActionListener
@@ -19,17 +19,17 @@ class KHamburgerMenu () : JPopupMenu(), ActionListener
 
    init
    {
-      var menuItem : JMenuItem = JMenuItem(Lang.word( 303 ), ImageIcon( "${Constants.ICONS_DIR}${Constants.SLASH}preferences-system.png" ))
+      var menuItem : JMenuItem = JMenuItem(Lang.word( 303 ), ImageIcon(iconsDir.resolve( "preferences-system.png" ).toString()) )
       menuItem.addActionListener( this )
       menuItem.setActionCommand( EventHandler.SAVE_SETTINGS )
       add( menuItem );
 
-      menuItem = JMenuItem(Lang.word( 27 ), ImageIcon( "${Constants.ICONS_DIR}${Constants.SLASH}emblem-downloads.png" ))
+      menuItem = JMenuItem(Lang.word( 27 ), ImageIcon(iconsDir.resolve( "emblem-downloads.png" ).toString()) )
       menuItem.setEnabled( false )
       menuItem.setActionCommand( EventHandler.GET_UPDATES )
       add( menuItem );
 
-      menuItem = JMenuItem( Lang.word( 331 ), ImageIcon( "${Constants.ICONS_DIR}${Constants.SLASH}accessories-text-editor.png" ))
+      menuItem = JMenuItem( Lang.word( 331 ), ImageIcon(iconsDir.resolve( "accessories-text-editor.png" ).toString()) )
       menuItem.setEnabled( false )
       menuItem.setActionCommand( EventHandler.ACCOUNT_EDIT )
       add( menuItem )

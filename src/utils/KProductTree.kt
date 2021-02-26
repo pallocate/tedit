@@ -2,12 +2,14 @@ package tedit.utils
 
 import java.awt.Component
 import java.awt.event.MouseListener
+import java.io.File
 import javax.swing.JTree
 import javax.swing.ImageIcon
 import javax.swing.tree.*
 import javax.swing.event.TreeSelectionListener
 import pen.Log
 import pen.eco.*
+import tedit.utils.iconsDir
 
 /** An implementation of JTree, used for selecting products. */
 class KProductTree (treeSelectionHandler : TreeSelectionListener, mouseHandler : MouseListener) : JTree()
@@ -25,10 +27,10 @@ class KProductTree (treeSelectionHandler : TreeSelectionListener, mouseHandler :
       setRootVisible( true )
       setShowsRootHandles( true )
 
-      val leafIcon : ImageIcon? = ImageIcon( "${Constants.ICONS_DIR}${Constants.SLASH}package-x-generic.png" )
-      val openIcon : ImageIcon? = ImageIcon( "${Constants.ICONS_DIR}${Constants.SLASH}folder-open.png" )
-      val closedIcon : ImageIcon? = ImageIcon( "${Constants.ICONS_DIR}${Constants.SLASH}folder.png" )
-      val analogueIcon : ImageIcon? = ImageIcon( "${Constants.ICONS_DIR}${Constants.SLASH}user-bookmarks.png" )
+      val leafIcon : ImageIcon? = ImageIcon(iconsDir.resolve( "package-x-generic.png" ).toString())
+      val openIcon : ImageIcon? = ImageIcon(iconsDir.resolve( "folder-open.png" ).toString())
+      val closedIcon : ImageIcon? = ImageIcon(iconsDir.resolve( "folder.png" ).toString())
+      val analogueIcon : ImageIcon? = ImageIcon(iconsDir.resolve( "user-bookmarks.png" ).toString())
 
       object : DefaultTreeCellRenderer()
       {
@@ -58,10 +60,10 @@ class KProductTree (treeSelectionHandler : TreeSelectionListener, mouseHandler :
 
    /** Loads an product tree XML file.
      * @return null if load failed. */
-   fun load (filename : String) : Int?
+   fun load (xmlFile : File) : Int?
    {
-      Log.debug( "Loading product tree \"$filename\"" )
-      return ProductTreeParser.parse( filename )?.let {
+      Log.debug( "Loading product tree \"$xmlFile\"" )
+      return ProductTreeParser.parse( xmlFile )?.let {
          model.setRoot( it )
          expand( it )
          treeTop = it

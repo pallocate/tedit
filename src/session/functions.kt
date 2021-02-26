@@ -6,9 +6,10 @@ import pen.serializeToFile
 import pen.deserializeFromFile
 import pen.par.KUser
 import tedit.Lang
-import tedit.utils.Constants.USERS_FILE
 import tedit.gui.KUserSelect
+import tedit.utils.usersFile
 
+/** From an id activates a user. If not found pops up a user selection dialog. */
 fun activateUser (userId : Long) : KUser
 {
    var ret = KUser.void()
@@ -28,7 +29,7 @@ fun activateUser (userId : Long) : KUser
 }
 
 internal fun saveUsers (users : List<KUser>) =
-   serializeToFile<List<KUser>>(users, USERS_FILE, ListSerializer( KUser.serializer() ))
+   serializeToFile<List<KUser>>(users, usersFile.toString(), ListSerializer( KUser.serializer() ))
 
 internal fun loadUsers () : List<KUser> =
-   deserializeFromFile<List<KUser>>(USERS_FILE, ListSerializer( KUser.serializer() )) ?: ArrayList<KUser>()
+   deserializeFromFile<List<KUser>>(usersFile.toString(), ListSerializer( KUser.serializer() )) ?: ArrayList<KUser>()

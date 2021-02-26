@@ -7,6 +7,7 @@ import pen.eco.KProduct
 import pen.eco.KProductInfo
 import pen.eco.KQuantableProductInfo
 
+/** Creates a vector with product information. */
 fun vectorize (productInfo : KProductInfo) : Vector<Object>
 {
    val ret = Vector<Object>()

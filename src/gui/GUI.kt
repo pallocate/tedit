@@ -19,7 +19,7 @@ object GUI
    internal val productTree                                     = KProductTree( KTreeSelectionHandler(), KMouseHandler() )
    internal val info                                            = KInfo()
    internal val hamburgerMenu                                   = KHamburgerMenu()
-   private val _fileChooser                                     = JFileChooser(File( "." ))
+   private val _fileChooser                                     = JFileChooser(File(System.getProperty( "user.dir" )))
 
    internal fun fileChooser (mode : FileCooserMode) = _fileChooser.apply {
 
@@ -51,7 +51,7 @@ object GUI
 
       }
 
-      selectedFile = File( "." )
+      selectedFile = File(System.getProperty( "user.dir" ))
       setAcceptAllFileFilterUsed( true )
    }
 

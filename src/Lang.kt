@@ -1,11 +1,11 @@
 package tedit
 
-import java.io.FileReader
+import java.nio.file.Files
 import java.util.Properties
 import pen.Log
-import tedit.utils.Constants
+import tedit.utils.languageDir
 
-/** Maps words and phrases as java.util.Properties read from file. */
+/** Maps words and phrases using java.util.Properties read from file. */
 class Dictionary (val language : String)
 {
    private val properties = Properties()
@@ -15,7 +15,7 @@ class Dictionary (val language : String)
       Log.debug( "Loading $language dictionary" )
 
       try
-      { properties.load(FileReader( Constants.LANGUAGE_DIR + Constants.SLASH + language )) }
+      {properties.load( Files.newBufferedReader(languageDir.resolve( language )) )}
       catch (e : Exception)
       { Log.warn( "Loading dictionary failed!" ) }
    }

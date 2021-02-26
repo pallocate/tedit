@@ -4,6 +4,7 @@ import javax.swing.JOptionPane
 import javax.swing.JFileChooser
 import pen.generateId
 import pen.eco.KProposal
+import pen.eco.KHeader
 import tedit.Lang
 import tedit.session.Session
 import tedit.session.KTenderDocument
@@ -18,8 +19,8 @@ internal fun newDocument ()
    if (!selectedRelation.isVoid())
    {
       val settings = Session.settings
-      val header = pen.eco.KHeader( generateId(), settings.year(), settings.iteration(), selectedRelation.target )
-      val proposal = pen.eco.KProposal( header )
+      val header = KHeader( generateId(), settings.year(), settings.iteration(), selectedRelation.target )
+      val proposal = KProposal( header )
       val document = KTenderDocument( proposal, selectedRelation )
       val tab = document.proposalTable.tab
 
@@ -27,8 +28,8 @@ internal fun newDocument ()
       GUI.tabs.setSelectedComponent( tab )
       document.proposalTable.setup()
 
-      updateTitle()
       Session.documents.documentList.add( document )
+      updateTitle()
    }
 }
 
@@ -39,7 +40,6 @@ internal fun openDocument ()
    {
       val selectedFile = fileChooser.getSelectedFile()
       val pathname = selectedFile.getAbsolutePath()
-      val filename = fileChooser.getName( selectedFile )
       val findResult = Session.documents.findOpen( pathname )
 
       if (findResult.isVoid())
@@ -47,18 +47,17 @@ internal fun openDocument ()
          if (selectedFile.exists() && pathname.endsWith( ".tdr" ))
          {
             val document = KTenderDocument.void()
-            val proposer = document.load( pathname )
+            val documentOwner = document.load( pathname )
 
-            if (proposer == Session.user.me.id)
+            if (documentOwner == Session.user.me.id)
             {
                val tab = document.proposalTable.tab
-               GUI.tabs.addTab( filename, tab )
+               GUI.tabs.addTab( document.filename(), tab )
                GUI.tabs.setSelectedComponent( tab )
 
                document.proposalTable.setup()
-               updateTitle()
-
                Session.documents.documentList.add( document )
+               updateTitle()
             }
          }
       }

@@ -1,6 +1,7 @@
 package tedit.session
 
 import pen.Log
+import pen.Constants.SLASH
 import pen.eco.KProposal
 import pen.par.KTender
 import pen.par.KRelation
@@ -8,7 +9,6 @@ import pen.par.KUser
 import tedit.utils.KPasswordPopup
 import tedit.Lang
 import tedit.gui.KProposalTable
-import tedit.utils.Constants.SLASH
 
 class KTenderDocument (internal var proposal : KProposal, internal var relation : KRelation)
 {
@@ -35,7 +35,7 @@ class KTenderDocument (internal var proposal : KProposal, internal var relation 
       try
       {
          val passwordPopup = KPasswordPopup()
-         val encryptor = Session.user.me.crypto( passwordPopup )
+         val encryptor = Session.user.me.irohaCrypto( passwordPopup )
 
          tender.write( filename, encryptor )
       }

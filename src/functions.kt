@@ -1,15 +1,16 @@
 package tedit
 
 import java.io.File
+import java.nio.file.Paths
 import javax.swing.JOptionPane
 import javax.swing.JFileChooser
+import pen.Constants
 import pen.eco.Target
-import tedit.utils.Constants.SLASH
-import tedit.utils.Constants.USERS_DIR
 import tedit.Lang
 import tedit.session.Session
 import tedit.session.KTenderDocument
 import tedit.gui.GUI
+import tedit.utils.usersDir
 
 class VoidFile : File( "" )
 
@@ -17,25 +18,15 @@ enum class FileCooserMode
 { OPEN, SAVE_AS, EXPORT }
 
 /** Sets the title according to file name and modification status. */
-internal fun updateTitle ()
+internal fun updateTitle () = with( Session.documents.activeDocument )
 {
-   var title = Lang.word( 301 ) + " - "
-
-   with( Session.documents.activeDocument )
-   {
-      title = title + pathname.substring( pathname.lastIndexOf( SLASH ) + 1 )
-
-      if (proposalTable.modified)
-         title = title + " *"
-   }
-
+   val title = Lang.word( 301 ) + " - " + filename() + if (proposalTable.modified) " *" else ""
    GUI.frame.setTitle( title )
 }
 
-internal fun progressPath () = USERS_DIR + SLASH + Session.user.me.info.name + SLASH + Session.settings.progression()
-
+/** Lets the user choose what file to save or export. */
 internal fun chooseFile (encrypted : Boolean = false) : File
-{
+ {
    var ret : File = VoidFile()
    val fileChooser = if (encrypted)
          GUI.fileChooser( FileCooserMode.EXPORT )
@@ -49,6 +40,7 @@ internal fun chooseFile (encrypted : Boolean = false) : File
    return ret
 }
 
+/** Gives the user a chance to bail out before overwriting a file. */
 internal fun overwriteAccept (file : File) : Boolean
 {
    val buttonTexts = arrayOf(Lang.word( 8 ), Lang.word( 9 ))
@@ -58,19 +50,20 @@ internal fun overwriteAccept (file : File) : Boolean
    return result == JOptionPane.YES_OPTION
 }
 
+/** Displays product info in the info panel. */
 internal fun showProductInfo (productId : String)
 {
    val relation = Session.documents.activeDocument.relation
 
    if (!relation.isVoid() && relation.target > Target.UNDEFINED)
    {
-      val productsDir = if (relation.target == Target.PRODUCTION)
+      val infoPath = Paths.get( "users", Session.user.me.info.name, if (relation.target == Target.PRODUCTION)
             "jobinfo"
          else
             "productinfo"
+         , productId + ".html" )
 
-      val productInfoPath = "${USERS_DIR}${SLASH}${Session.user.me.info.name}${SLASH}$productsDir"
-      GUI.info.load( "${productInfoPath}${SLASH}${productId}.html" )
+      GUI.info.load( infoPath.toFile() )
    }
 }
 

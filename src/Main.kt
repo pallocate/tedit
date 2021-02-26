@@ -7,10 +7,9 @@ import tedit.gui.GUI
 import tedit.session.activateUser
 import tedit.session.Session
 
-/** The main class. */
 object Main
 {
-   /** Handles command line arguments, then starts the application. */
+   /** Handles command line arguments and starts the application. */
    @JvmStatic
    fun main (args : Array<String>)
    {
@@ -48,7 +47,7 @@ object Main
       { GUI.start() }
       catch (t : Throwable)
       {
-         Log.critical( "Critical exception, (${t.message})" )
+         Log.critical( "Critical error, (${t.message})" )
          kotlin.system.exitProcess( 1 )
       }
    }
@@ -56,7 +55,7 @@ object Main
    private fun printUsageAndExit ()
    {
       println( "Usage: tedit [OPTION]... [USER_ID]\n" )
-      println( "Options are:" )
+      println( "Options:" )
       println( "  -d     Debug" )
       println( "  -q     Quiet" )
       println( "  -h     Show this help" )

@@ -20,16 +20,16 @@ class KInfo () : JEditorPane(), HyperlinkListener
 
    /** Loads file into info pane.
      * @return True if successful */
-   internal fun load (filename : String) : Boolean
+   internal fun load (infoFile : File) : Boolean
    {
       var success = false
-      Log.debug( "Loading info page \"$filename\"" )
+      Log.debug( "Loading info page \"$infoFile\"" )
 
-      if ((File( filename )).exists())
+      if (infoFile.exists())
       {
          try
          {
-            setPage( URL(URL( "file:" ), filename) )
+            setPage( infoFile.toURL() )
             success = true
          }
          catch (e : Exception) { Log.warn( "Page load failed!" ) }

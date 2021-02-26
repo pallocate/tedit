@@ -18,7 +18,7 @@ fi
 
 ###  JVM  ###
 if [ $task = "jvm" ]; then
-   DEPENDENCIES=$SERIAL_RUN:$APACHE_COMMON:$IROHA_ED25519
+   DEPENDENCIES=$SERIAL_RUN:$APACHE_COMMON:$IROHA_ED25519:$JNA
    cmd-timed "kotlinc -d build/dist/platform/jvm/pen/pen.jar -cp $DEPENDENCIES -Xmulti-platform -Xplugin=$SERIAL_PLUG src/common src/jvm"
 
 ###  Wasm  ###
@@ -60,7 +60,7 @@ elif [ $1 = "linux" ]; then
 
 ###  Tests  ###
 elif [ $task = "tests" ]; then
-   DEPENDENCIES=$JUNIT:$PEN:$IRC:$JNA:$SERIAL_RUN
+   DEPENDENCIES=$JUNIT:$PEN:$IRC:$JNA:$SERIAL_RUN:$JNA
    kotlinc -d build/dist/platform/jvm/pen/examples.jar -cp $DEPENDENCIES -Xmulti-platform src/common_tests
 
 #   if [ $? -eq 0 ]; then

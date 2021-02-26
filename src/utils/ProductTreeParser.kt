@@ -1,11 +1,10 @@
 package tedit.utils
 
-import java.io.ByteArrayInputStream
 import java.io.FileInputStream
+import java.io.File
 import javax.xml.parsers.SAXParser
 import javax.xml.parsers.SAXParserFactory
 import org.xml.sax.Attributes
-import org.xml.sax.SAXException
 import org.xml.sax.helpers.DefaultHandler
 import javax.swing.tree.DefaultMutableTreeNode
 import java.util.Stack
@@ -16,15 +15,15 @@ import pen.Log
 object ProductTreeParser
 {
    /** @return Top of the product tree. */
-   fun parse (filename : String) : DefaultMutableTreeNode?
+   fun parse (xmlFile : File) : DefaultMutableTreeNode?
    {
       var fis : FileInputStream? = null
       var ret : DefaultMutableTreeNode? = null
-      Log.debug( "Parsing XML file \"$filename\"" )
+      Log.debug( "Parsing XML file \"$xmlFile\"" )
 
       try
       {
-         fis = FileInputStream( filename )
+         fis = FileInputStream( xmlFile )
          val saxParser : SAXParser = SAXParserFactory.newInstance().newSAXParser()
          val handler = object : DefaultHandler()
          {

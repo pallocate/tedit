@@ -1,15 +1,14 @@
 package tedit.gui
 
+import java.io.File
 import javax.swing.JTabbedPane
 import javax.swing.JScrollPane
 import javax.swing.event.ChangeListener
 import javax.swing.event.ChangeEvent
 import pen.eco.Target
 import pen.par.KRelation
-import tedit.utils.Constants.USERS_DIR
-import tedit.utils.Constants.SLASH
 import tedit.updateTitle
-import tedit.progressPath
+import tedit.utils.progressPath
 import tedit.session.Session
 
 object NoTab : JScrollPane()
@@ -35,7 +34,7 @@ class KTabs () : JTabbedPane(), ChangeListener
             Session.documents.activate( proposalTable.tenderDocument )
 
             val otherId = proposalTable.tenderDocument.relation.other.id
-            GUI.productTree.load( progressPath() + SLASH + otherId + ".xml" )
+            GUI.productTree.load(progressPath().resolve( otherId.toString() + ".xml" ).toFile())
 
             updateTitle()
          }

@@ -6,8 +6,9 @@ import javax.swing.ImageIcon
 import javax.swing.DefaultComboBoxModel
 import pen.par.KRelation
 import tedit.Lang
-import tedit.utils.Constants
+import tedit.utils.iconsDir
 
+/** A selection dialog to let the user select a relation. */
 class KRelationSelect (relations : ArrayList<KRelation>) : SelectionDialog(GUI.frame, Lang.word( 330 ))
 {
    override protected val TEXT                         = Lang.word( 206 )
@@ -16,7 +17,7 @@ class KRelationSelect (relations : ArrayList<KRelation>) : SelectionDialog(GUI.f
    init
    {
       selectionCombo.setModel(DefaultComboBoxModel( relations.toTypedArray<KRelation>() ))
-      setIconImage(ImageIcon( Constants.ICONS_DIR + Constants.SLASH + "system-users.png" ).getImage())
+      setIconImage( ImageIcon(iconsDir.resolve( "system-users.png" ).toString()).getImage() )
       defaultSetup()
    }
 
@@ -28,11 +29,13 @@ class KRelationSelect (relations : ArrayList<KRelation>) : SelectionDialog(GUI.f
 
    fun selectedRelation () : KRelation
    {
+      var ret = KRelation.void()
       val selected = selectionCombo.getSelectedItem()
 
-      return if (selected is KRelation)
+      if (selected is KRelation)
          selected
-      else
-         KRelation.void()
+
+      return ret
+
    }
 }
