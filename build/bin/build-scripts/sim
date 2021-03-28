@@ -2,30 +2,24 @@
 
 cd /home/projects/sim/current
 
-task="all"
+task="compile"
 if [ $1 ]; then
    task=$1
 fi
 
-SIM_JAR="build/dist/platform/jvm/sim/sim.jar"
-DEPENDENCIES=$PEN:$KAD:$JNA
+DEPENDENCIES=$COROUTINES:$KROTO_COROUTINES:$GRPC_PROTOBUF:$GRPC_CONTEXT:$GRPC_CORE:$GRPC_STUB:$GRPC_API:$GUAVA:$GRPC_NETTY_SHADED:\
+$GRPC_PROTOBUF_LITE:$PROTOBUF_JAVA:$PERFMARK:$PROTOCOL:$PEN:$PEN_TESTS:$KICK:$JNA:$APACHE_COMMON:$IROHA_ED25519
 
-if [ $task = "all" ]; then
-   cmd-timed "kotlinc -d $SIM_JAR -cp $DEPENDENCIES:$REFLECT src"
+if [ $task = "compile" ]; then
+   kotlinc -d $SIM -cp $DEPENDENCIES src
 
 elif [ $task = "run" ]; then
-   echo Running..
-   kotlin -cp $SIM_JAR:$DEPENDENCIES:$SERIAL_RUN:$COROUTINES sim.Main $2
+   kotlin -cp $SIM:$DEPENDENCIES:$SERIAL_RUN sim.Main $2
 
-elif [ $task = "api" ]; then
-   clear
-   echo "Creating api docs.." ; echo
-   java -cp $STDLIB -jar $DOKKA src -output build/docs/sim
+elif [ $task = "docs" ]; then
+   java -cp $STDLIB:$DEPENDENCIES -jar $DOKKA src -output build/docs/sim/api
 
 else
-   echo "Usage: $0 task"
-   echo
-   echo "Tasks:"
-   echo "all            run            api"
+   echo "Usage: build sim [compile|run|docs]"; echo
+
 fi
-echo

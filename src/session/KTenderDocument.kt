@@ -1,7 +1,7 @@
 package tedit.session
 
 import pen.Log
-import pen.Constants.SLASH
+import pen.slash
 import pen.eco.KProposal
 import pen.par.KTender
 import pen.par.KRelation
@@ -31,11 +31,11 @@ class KTenderDocument (internal var proposal : KProposal, internal var relation 
 
    internal fun saveEncrypted (filename : String)
    {
-      val tender = KTender( proposal, relation.other.id, Session.user.me.id )
+      val tender = KTender( proposal, relation.other.id, Session.user.me.contact.id )
       try
       {
          val passwordPopup = KPasswordPopup()
-         val encryptor = Session.user.me.irohaCrypto( passwordPopup )
+         val encryptor = Session.user.me.crypto( passwordPopup )
 
          tender.write( filename, encryptor )
       }
@@ -46,7 +46,7 @@ class KTenderDocument (internal var proposal : KProposal, internal var relation 
    internal fun save () : Boolean
    {
       var success = false
-      val tender = KTender( proposal, relation.other.id, Session.user.me.id )
+      val tender = KTender( proposal, relation.other.id, Session.user.me.contact.id )
 
       try
       {
@@ -63,7 +63,7 @@ class KTenderDocument (internal var proposal : KProposal, internal var relation 
    {
       var ret = Lang.word( 3 )
       try
-      { ret = pathname.drop(pathname.lastIndexOf( SLASH ) + 1) }
+      { ret = pathname.drop(pathname.lastIndexOf( slash() ) + 1) }
       catch (e : Exception) {}
 
       return ret

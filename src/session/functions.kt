@@ -18,7 +18,7 @@ fun activateUser (userId : Long) : KUser
 
    if (users.size > 0)
    {
-      ret = users.find { userId == it.me.id } ?: KUser.void()
+      ret = users.find { userId == it.me.contact.id } ?: KUser.void()
       if (ret.isVoid())
          ret = KUserSelect( users ).selectedUser()
    }

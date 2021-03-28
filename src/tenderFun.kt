@@ -49,7 +49,7 @@ internal fun openDocument ()
             val document = KTenderDocument.void()
             val documentOwner = document.load( pathname )
 
-            if (documentOwner == Session.user.me.id)
+            if (documentOwner == Session.user.me.contact.id)
             {
                val tab = document.proposalTable.tab
                GUI.tabs.addTab( document.filename(), tab )

@@ -20,27 +20,28 @@ class KFrame () : JFrame(), WindowListener
 {
    init
    {
-      val splitpane = JSplitPane().apply {
-         setDividerSize( 4 )
-         setDividerLocation( 275 )
-         setLeftComponent(JScrollPane( GUI.productTree ))
-         setRightComponent( JSplitPane().apply {
-            setDividerSize( 6 )
-            setDividerLocation( 450 )
-            setLeftComponent( GUI.tabs )
-            setRightComponent( GUI.info )
-         })
-      }
-
       with( getContentPane() ) {
+         add(
+            JSplitPane().apply {
+               setDividerSize( 4 )
+               setDividerLocation( 275 )
+               setLeftComponent(JScrollPane( GUI.productTree ))
+               setRightComponent( JSplitPane().apply {
+                  setDividerSize( 6 )
+                  setDividerLocation( 450 )
+                  setLeftComponent( GUI.tabs )
+                  setRightComponent( GUI.info )
+               })
+            }
+         , BorderLayout.CENTER )
+
+         add(GUI.statusBar, BorderLayout.SOUTH)
          if (Session.settings.toolbar)
             add(KToolbar( GUI.hamburgerMenu.hamburgerButton ), BorderLayout.NORTH)
 
-         add( splitpane, BorderLayout.CENTER )
-         add(GUI.statusBar, BorderLayout.SOUTH)
       }
 
-      val startPage = Paths.get( usersDir.toString(), Session.user.me.info.name, Session.settings.progression(), "index.html" )
+      val startPage = Paths.get( usersDir.toString(), Session.user.me.contact.info.name, Session.settings.progression(), "index.html" )
       GUI.info.load( startPage.toFile() )
       setJMenuBar( KMenu() )
 
@@ -52,9 +53,8 @@ class KFrame () : JFrame(), WindowListener
    }
 
    override fun windowClosing (e : WindowEvent)
-   {
-      EventHandler.handle( EventHandler.QUIT )
-   }
+   {EventHandler.handle( EventHandler.QUIT )}
+
    override fun windowActivated (e : WindowEvent) {}
    override fun windowClosed (e : WindowEvent) {}
    override fun windowDeactivated (e : WindowEvent) {}

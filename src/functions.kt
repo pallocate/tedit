@@ -4,7 +4,6 @@ import java.io.File
 import java.nio.file.Paths
 import javax.swing.JOptionPane
 import javax.swing.JFileChooser
-import pen.Constants
 import pen.eco.Target
 import tedit.Lang
 import tedit.session.Session
@@ -26,7 +25,7 @@ internal fun updateTitle () = with( Session.documents.activeDocument )
 
 /** Lets the user choose what file to save or export. */
 internal fun chooseFile (encrypted : Boolean = false) : File
- {
+{
    var ret : File = VoidFile()
    val fileChooser = if (encrypted)
          GUI.fileChooser( FileCooserMode.EXPORT )
@@ -57,7 +56,7 @@ internal fun showProductInfo (productId : String)
 
    if (!relation.isVoid() && relation.target > Target.UNDEFINED)
    {
-      val infoPath = Paths.get( "users", Session.user.me.info.name, if (relation.target == Target.PRODUCTION)
+      val infoPath = Paths.get( "users", Session.user.me.contact.info.name, if (relation.target == Target.PRODUCTION)
             "jobinfo"
          else
             "productinfo"

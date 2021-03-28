@@ -1,4 +1,5 @@
 protobuf-socket-rpc-2.0.jar
+failureaccess-1.0.1.jar
 protobuf-java-util-3.13.0.jar
 guava-29.0-jre.jar
 protobuf-java-3.13.0.jar
@@ -21,6 +22,7 @@ junit-jupiter-api-5.4.2.jar
 junit-platform-console-standalone-1.4.2.jar
 kotlinx-serialization-runtime-1.0-M1-1.4.0-rc.jar
 kotlinx-serialization-protobuf-1.0.0-RC.jar
+postgresql-42.2.19.jar
 bcprov-jdk15on-1.56.jar
 javax.jar
 annotations-13.0.jar

@@ -18,4 +18,4 @@ val helpDir = resourcesDir.resolve( "help" )
 /** Directory where language translations are stored. */
 val languageDir = resourcesDir.resolve( "language" )
 
-fun progressPath () = Paths.get( usersDir.toString(), Session.user.me.info.name, Session.settings.progression() )
+fun progressPath () = Paths.get( usersDir.toString(), Session.user.me.contact.info.name, Session.settings.progression() )

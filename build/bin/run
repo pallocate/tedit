@@ -3,11 +3,11 @@
 cd /home/projects/build/bin/build-scripts
 
 case $1 in
-   "tedit" | "sim" | "kick")
+   "tedit" | "kick" | "sim")
       ./$1 run $2 $3 $4 $5 $6 $7
    ;;
 
    *)
-      echo "Usage: run [tedit|sim|kick]"
+      echo "Usage: run [tedit|kick|sim]"
    ;;
 esac
