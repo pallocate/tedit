@@ -18,7 +18,7 @@ fi
 
 ###  JVM  ###
 if [ $task = "jvm" ]; then
-   DEPENDENCIES=$SERIAL_RUN:$APACHE_COMMON:$IROHA_ED25519:$JNA
+   DEPENDENCIES=$SERIAL_RUN:$COROUTINES:$APACHE_COMMON:$IROHA_ED25519:$JNA
    cmd-timed "kotlinc -d build/dist/platform/jvm/pen/pen.jar -cp $DEPENDENCIES -Xmulti-platform -Xplugin=$SERIAL_PLUG src/common src/jvm"
 
 ###  Wasm  ###
