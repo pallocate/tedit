@@ -33,7 +33,7 @@ class KRelationSelect (relations : ArrayList<KRelation>) : SelectionDialog(GUI.f
       val selected = selectionCombo.getSelectedItem()
 
       if (selected is KRelation)
-         selected
+         ret = selected
 
       return ret
 

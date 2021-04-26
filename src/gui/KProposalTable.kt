@@ -1,8 +1,8 @@
 package tedit.gui
 
-import java.util.Vector
 import java.awt.Font
 import java.awt.event.MouseEvent
+import java.util.Vector
 import javax.swing.JTable
 import javax.swing.JScrollPane
 import javax.swing.ListSelectionModel

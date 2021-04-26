@@ -12,7 +12,6 @@ import javax.swing.JSplitPane
 import tedit.EventHandler
 import tedit.Lang
 import tedit.utils.usersDir
-
 import tedit.session.Session
 
 /** The main frame of the app. */

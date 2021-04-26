@@ -22,12 +22,12 @@ internal fun newDocument ()
       val header = KHeader( generateId(), settings.year(), settings.iteration(), selectedRelation.target )
       val proposal = KProposal( header )
       val document = KTenderDocument( proposal, selectedRelation )
-      val tab = document.proposalTable.tab
 
+      val tab = document.proposalTable.tab
       GUI.tabs.addTab(Lang.word( 3 ), tab)
       GUI.tabs.setSelectedComponent( tab )
-      document.proposalTable.setup()
 
+      document.proposalTable.setup()
       Session.documents.documentList.add( document )
       updateTitle()
    }

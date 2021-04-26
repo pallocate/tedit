@@ -1,5 +1,6 @@
 package tedit.gui
 
+import java.awt.Font
 import java.io.File
 import java.net.URL
 import javax.swing.JEditorPane
@@ -13,9 +14,11 @@ class KInfo () : JEditorPane(), HyperlinkListener
    init
    {
       setEditorKit(JEditorPane.createEditorKitForContentType( "text/html" ))
-      setEditable( false )
       addHyperlinkListener( this )
 
+      putClientProperty( JEditorPane.HONOR_DISPLAY_PROPERTIES, true )
+      setFont(Font( "SansSerif", Font.PLAIN, 13 ))      
+      setEditable( false )
   }
 
    /** Loads file into info pane.
