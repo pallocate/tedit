@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd /home/projects/kick/current
+cd /home/projects/kick/kick
 
 task="compile"
 if [ $1 ]; then
@@ -11,15 +11,18 @@ DEPENDENCIES=$COROUTINES:$KROTO_COROUTINES:$GRPC_PROTOBUF:$GRPC_CONTEXT:$GRPC_CO
 $GRPC_PROTOBUF_LITE:$PROTOBUF_JAVA:$PERFMARK:$GRPC_NETTY_SHADED:$PROTOCOL:$PEN:$PEN_TESTS:$APACHE_COMMON:$IROHA_ED25519
 
 if [ $task = "compile" ]; then
-   kotlinc -d $KICK -cp $DEPENDENCIES src
+   kotlinc -cp $DEPENDENCIES -d $KICK src/jvm src/jvm_utils
 
 elif [ $task = "run" ]; then
-   kotlin -cp $KICK:$DEPENDENCIES kick.tests.dumpserver.Main $2
+   kotlin -cp $KICK:$DEPENDENCIES kick.utils.DumpServer $2
+
+elif [ $task = "tests" ]; then
+   kotlinc -cp $KICK:$DEPENDENCIES:$JUNIT -d $KICK_TESTS -Xmulti-platform src/jvm_tests
 
 elif [ $task = "docs" ]; then
    java -cp $STDLIB:$DEPENDENCIES -jar $DOKKA src/jvm -output build/docs/kick/api
-
+   
 else
-   echo "Usage: build kick [compile|run|docs]"; echo
+   echo "Usage: build kick [compile|run|tests|docs]"; echo
 
 fi

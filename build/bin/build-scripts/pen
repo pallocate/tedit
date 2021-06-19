@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd /home/projects/pen/current
+cd /home/projects/pen/pen
 
 ###  Print usage  ###
 printUsage () {

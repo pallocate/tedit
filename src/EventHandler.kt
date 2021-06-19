@@ -1,13 +1,12 @@
 package tedit
 
-//import java.io.File
 import javax.swing.JCheckBox
 import javax.swing.JOptionPane
 import javax.swing.JLabel
 import javax.swing.tree.DefaultMutableTreeNode
 import pen.eco.Target
 import pen.eco.KProposal
-import pen.eco.KProductInfo
+import pen.eco.KProduct_v1
 import tedit.session.Session
 import tedit.session.KTenderDocument
 import tedit.gui.GUI
@@ -51,14 +50,19 @@ object EventHandler
          OPEN ->
             openDocument()
 
+         /* TODO: Iterate proposal table to get quatities into the tender document. */
          SAVE ->
             if (activeDocument.isModified() || !activeDocument.isPathSet())
+            {
+               activeDocument.updateFromModel()
                saveDocument( activeDocument )
-
+            }
          SAVE_AS ->
             if (activeDocument.isModified() || !activeDocument.isPathSet())
+            {
+               activeDocument.updateFromModel()
                saveDocumentAs( activeDocument )
-
+            }
          EXPORT_ENCRYPTED ->
             exportEncrypted( activeDocument )
 
@@ -113,19 +117,11 @@ object EventHandler
             }
          }
 
-         ADD ->
-            if (Session.documents.activeDocument.proposalTable.add())
-            {
-               Session.documents.activeDocument.proposalTable.modified = true
-               updateTitle()
-            }
+         ADD -> 
+            Session.documents.activeDocument.proposalTable.add()
 
-         REMOVE ->
-            if (Session.documents.activeDocument.proposalTable.remove())
-            {
-               Session.documents.activeDocument.proposalTable.modified = true
-               updateTitle()
-            }
+         REMOVE -> 
+            Session.documents.activeDocument.proposalTable.remove()
 
          CLEAR ->
          {
@@ -134,7 +130,6 @@ object EventHandler
                pathname = Lang.word( 3 )
                proposalTable.vanilla()
                proposalTable.setup()
-               updateTitle()
             }
             GUI.productTree.resetSearch()
          }
@@ -150,8 +145,8 @@ object EventHandler
             val dmt = GUI.productTree.getLastSelectedPathComponent()
 
             dmt?.let {
-               val selectedObject = (it as DefaultMutableTreeNode).getUserObject() as KProductInfo
-               showProductInfo( selectedObject.id.toString() )
+               val selectedObject = (it as DefaultMutableTreeNode).getUserObject() as KProduct_v1
+               showProduct( selectedObject.id.toString() )
             }
          }
 

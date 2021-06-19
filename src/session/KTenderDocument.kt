@@ -15,10 +15,10 @@ class KTenderDocument (internal var proposal : KProposal, internal var relation 
    companion object
    {fun void () = KTenderDocument( KProposal.void(), KRelation.void() )}
 
-   internal var pathname = Lang.word( 3 )
-   internal val proposalTable = KProposalTable( this )
+   var pathname = Lang.word( 3 )
+   val proposalTable = KProposalTable( this )
 
-   internal fun load (pathname : String) : Long
+   fun load (pathname : String) : Long
    {
       val tender = KTender.read( pathname )
 
@@ -29,7 +29,7 @@ class KTenderDocument (internal var proposal : KProposal, internal var relation 
       return tender.proposer
    }
 
-   internal fun saveEncrypted (filename : String)
+   fun saveEncrypted (filename : String)
    {
       val tender = KTender( proposal, relation.other.id, Session.user.me.contact.id )
       try
@@ -43,7 +43,7 @@ class KTenderDocument (internal var proposal : KProposal, internal var relation 
       { Log.warn( e.message ?: "Export encrypted failed!" ) }
    }
 
-   internal fun save () : Boolean
+   fun save () : Boolean
    {
       var success = false
       val tender = KTender( proposal, relation.other.id, Session.user.me.contact.id )
@@ -67,6 +67,13 @@ class KTenderDocument (internal var proposal : KProposal, internal var relation 
       catch (e : Exception) {}
 
       return ret
+   }
+   
+   fun updateFromModel ()
+   {
+      proposal.hashMap.clear()
+      val productRows = proposalTable.proposalTableModel.productRows
+      proposal.hashMap.putAll( productRows.map { it.productQuantity.toPair() } )
    }
 
    fun isPathSet () = pathname != Lang.word( 3 )

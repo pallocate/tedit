@@ -10,9 +10,9 @@ import tedit.utils.settingsFile
 @Serializable
 class KSettings ()
 {
-   companion object
+   internal companion object
    {
-      internal fun load () : KSettings
+      fun load () : KSettings
       {
          var ret = KSettings()
          val obj = deserializeFromFile<KSettings>( settingsFile.toString(), serializer() )

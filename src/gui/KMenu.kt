@@ -87,7 +87,7 @@ class KMenu () : JMenuBar(), ActionListener
 
    private fun productMenu () : JMenu
    {
-      val ret = JMenu(Lang.word( 223 ))
+      val ret = JMenu(Lang.word( 208 ))
       var menuItem : JMenuItem
 
       menuItem = JMenuItem(Lang.word( 25 ))

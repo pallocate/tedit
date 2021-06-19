@@ -2,34 +2,47 @@ package tedit.gui
 
 import java.awt.Font
 import java.awt.event.MouseEvent
-import java.util.Vector
 import javax.swing.JTable
 import javax.swing.JScrollPane
 import javax.swing.ListSelectionModel
 import javax.swing.SwingConstants
 import javax.swing.DefaultListSelectionModel
-import javax.swing.table.DefaultTableModel
+import javax.swing.table.AbstractTableModel
 import javax.swing.table.DefaultTableCellRenderer
 import javax.swing.tree.TreeNode
 import javax.swing.tree.DefaultMutableTreeNode
-import javax.swing.event.*
+import javax.swing.event.ListSelectionListener
+import javax.swing.event.ListSelectionEvent
 import pen.toLong
-import pen.eco.KProduct
-import pen.eco.KProductInfo
-import pen.eco.KQuantableProductInfo
-import tedit.utils.vectorize
-import tedit.*
+import pen.eco.toProductQuantity
+import pen.eco.KProduct_v1
+import pen.eco.KProductQuantity
+import pen.eco.KProductQuantities
+import tedit.showProduct
+import tedit.updateTitle
+import tedit.Lang
 import tedit.session.KTenderDocument
+import tedit.gui.KProposalTable
+
+data class KProductRow (val product : KProduct_v1, val productQuantity : KProductQuantity)
 
 /** A table for showing products and edit quantities. */
 class KProposalTable (internal val tenderDocument : KTenderDocument) : JTable()
 {
    /** The proposal table is added to this JScrollPane. */
    internal val tab = JScrollPane()
-   internal var modified                               = false
-   private var model : CustomTableModel?               = null
-   private var isChanging                              = false                  // To mitigate effects of unwanted selection events.
-   private var selectedProductNum                      = -1
+   internal var modified = false
+      set(state : Boolean)
+      {
+         if (state)
+         {
+            proposalTableModel.fireTableDataChanged()
+            updateTitle()
+         }
+         field = state
+      }
+   internal val proposalTableModel = KProposalTableModel()
+   private var selectedProductNum = -1
 
    init
    {
@@ -50,20 +63,10 @@ class KProposalTable (internal val tenderDocument : KTenderDocument) : JTable()
    /** Resets the table using info from proposal. */
    internal fun setup ()
    {
-      isChanging = true
+      proposalTableModel.addAll( tenderDocument.proposal )
+      setModel( proposalTableModel )
 
-      val columnNames = Vector<Object>().apply {
-         add( Lang.word( 45 ) as Object )
-         add( Lang.word( 223 ) as Object )
-         add( Lang.word( 46 ) as Object )
-         add( Lang.word( 48 ) as Object )
-      }
-
-      model = CustomTableModel(vectorize( tenderDocument.proposal.products, GUI.productTree ), columnNames)
-      setModel( model )
-      model?.addTableModelListener( TableModelHandler() )
-
-      getColumnModel().apply {
+      with (columnModel) {
          val centerRenderer = DefaultTableCellRenderer()
          centerRenderer.setHorizontalAlignment( SwingConstants.CENTER )
 
@@ -75,74 +78,41 @@ class KProposalTable (internal val tenderDocument : KTenderDocument) : JTable()
          getColumn( 3 ).setPreferredWidth( 70 )
          getColumn( 3 ).setCellRenderer( centerRenderer )
       }
-
-      isChanging = false
    }
 
    /** Dumps information returning tab to a prestine state. */
    internal fun vanilla ()
    {
       selectedProductNum = -1
-      model = null
+      proposalTableModel.productRows.clear()
+      proposalTableModel.fireTableDataChanged()
       modified = false
    }
 
    /** Adds selected product to the proposal if not already present. */
-   internal fun add () : Boolean
+   internal fun add ()
    {
-      var success = false
       val node = GUI.productTree.getLastSelectedPathComponent()
 
       if (node != null && GUI.productTree.isAChoosableProduct( node as TreeNode ))
       {
-         val newProductInfo = ((node as DefaultMutableTreeNode).getUserObject() as KProductInfo)
-         val newProduct = KProduct( newProductInfo.id )
-
-         var alreadyInTableNr = -1                                              // Used to find out if the new product already exists in the proposal.
-
-         for (n in tenderDocument.proposal.products.indices)
-            if (newProduct.id == tenderDocument.proposal.products.get( n ).id)
-               alreadyInTableNr = n
-
-         if (alreadyInTableNr == -1)                                            // The product was not found in the proposal.
-         {
-            val vector = vectorize( newProductInfo )
-
-            if (selectedProductNum == -1)                                       // Add product.
-            {
-               selectedProductNum = getRowCount()
-               model?.addRow( vector )
-               setRowSelectionInterval( selectedProductNum, selectedProductNum )
-               tenderDocument.proposal.products.add( newProduct )
-            }
-            else                                                                // Insert product.
-            {
-               selectedProductNum += 1
-               model?.insertRow( selectedProductNum, vector )
-               setRowSelectionInterval( selectedProductNum, selectedProductNum )
-               tenderDocument.proposal.products.add( selectedProductNum, newProduct )
-            }
-            success = true
-         }
-         else
-            setRowSelectionInterval( alreadyInTableNr, alreadyInTableNr )       // Otherwise, select it.
+         val newProduct = ((node as DefaultMutableTreeNode).getUserObject() as KProduct_v1)
+         
+         proposalTableModel.add( newProduct )
+         selectedProductNum = proposalTableModel.productRows.size - 1
+         proposalTableModel.fireTableDataChanged()
+         modified = true
       }
-
-      return success
    }
 
    /** Removes selected product from the proposal. */
-   internal fun remove () : Boolean
+   internal fun remove ()
    {
-      var success = false
-
-      if (selectedProductNum != -1)
+      if (selectedProductNum > -1)
       {
-         isChanging = true
-         tenderDocument.proposal.products.removeAt( selectedProductNum )
-         model?.removeRow( selectedProductNum )
+         proposalTableModel.productRows.removeAt( selectedProductNum )
 
-         if (selectedProductNum >= tenderDocument.proposal.products.size)
+         if (selectedProductNum >= proposalTableModel.productRows.size)
          {
             selectedProductNum -= 1
             if (selectedProductNum >= 0)
@@ -151,11 +121,8 @@ class KProposalTable (internal val tenderDocument : KTenderDocument) : JTable()
          else
             setRowSelectionInterval( selectedProductNum, selectedProductNum )
 
-         isChanging = false
-         success = true
+         modified = true
       }
-
-      return success
    }
 
    /** The product description is shown as a tooltip. */
@@ -165,60 +132,78 @@ class KProposalTable (internal val tenderDocument : KTenderDocument) : JTable()
       val rowIndex = rowAtPoint( e.getPoint() )
       val realRowIndex = convertRowIndexToModel( rowIndex )
 
-      if (realRowIndex >= 0 && realRowIndex < tenderDocument.proposal.products.size)
+      if (proposalTableModel != null && realRowIndex >= 0 && realRowIndex < rowCount)
       {
-         val product = tenderDocument.proposal.products.getOrNull( realRowIndex )
-         product?.let {
-            val productInfo = GUI.productTree.productInfo( it )
+         val productId = proposalTableModel.getValueAt( realRowIndex, 0 ) as Long
+         val product = GUI.productTree.product( productId )
 
-            if (productInfo is KQuantableProductInfo)
-               ret = productInfo.desc
-         }
+         if (product is KProduct_v1)
+            ret = product.desc
       }
       return ret
    }
 
-   /** Makes the table uneditable except for product quantity. */
-   internal inner class CustomTableModel (data : Vector<Vector<Object>>, columnNames : Vector<Object>) : DefaultTableModel (data, columnNames)
+   internal inner class KProposalTableModel () : AbstractTableModel ()
    {
-      override fun isCellEditable (i1 : Int, i2 : Int) : Boolean
-      {
-         var ret = false
-         if (i2 == 3)
-            ret = true
+      val columnNames = arrayOf(Lang.word( 45 ), Lang.word( 223 ), Lang.word( 46 ), Lang.word( 48 ))
+      val productRows = ArrayList<KProductRow>()
 
-         return ret
+      fun add (product : KProduct_v1)
+      {
+         if (!productRows.any { it.product.id == product.id })
+            productRows.add( KProductRow(product, KProductQuantity( product.id )) )
       }
-   }
 
-   /** Handles changes to quantities.
-     * @note Could´nt be done in EventHandler due to threading issues. */
-   internal inner class TableModelHandler () : TableModelListener
-   {
-      override fun tableChanged (e : TableModelEvent)
+      fun add (productQuantity : KProductQuantity)
       {
-         if (!(e.getColumn() == TableModelEvent.ALL_COLUMNS))
+         if (!productRows.any { it.product.id == productQuantity.id })
          {
-            val value = getValueAt( e.getFirstRow(), 3 )
-            if (value != null && value is String)
-            {
-               if (selectedProductNum != -1)
-               {
-                  val qty = value.trim().toLong( 0 )
-
-                  val productList = tenderDocument.proposal.products
-                  val product = productList.getOrNull( selectedProductNum )
-
-                  if (product is KProduct)
-                  {
-                     modified = true
-                     updateTitle()
-                     productList.set(productList.indexOf( product ), KProduct( product.id, qty ))
-                  }
-               }
-            }
+            val product = GUI.productTree.product( productQuantity.id )
+            productRows.add(KProductRow( product, productQuantity ))
          }
       }
+
+      fun addAll (productQuatities : KProductQuantities) = productQuatities.toList().forEach {add( it.toProductQuantity() )}
+
+      override fun getValueAt (row : Int, col : Int) : Object
+      {
+         val product = productRows[row.coerceIn( 0, productRows.size-1 )].product
+         return when (col)
+         {
+            0 -> product.id as Object
+            1 ->
+            {
+               val apu = product.apu()
+               (product.toString() + if (apu == "")
+                                       ""
+                                     else
+                                       ", " + apu) as Object
+            }
+            2 -> product.price.toString() as Object
+            3 -> productRows[row].productQuantity as Object
+            else -> Object()
+         }
+      }
+
+      override fun getColumnClass (c : Int) = "".javaClass
+
+      /** Only accept changes to product quantity. */
+      override fun isCellEditable (row : Int, col : Int) = if (col == 3) true   else false
+
+      @Override
+      fun setValueAt (value : Object, row : Int, col : Int)
+      {
+         if (col == 3)
+         {
+            productRows[row].productQuantity.qty = (value as String).toLong()
+            fireTableCellUpdated(row, col);
+            modified = true
+         }
+      }
+
+      override fun getColumnName (col : Int) = columnNames[col]
+      override fun getColumnCount () = columnNames.size
+      override fun getRowCount() = productRows.size
    }
 
    /** Handles selection events in the table.
@@ -227,10 +212,10 @@ class KProposalTable (internal val tenderDocument : KTenderDocument) : JTable()
    {
       override fun valueChanged (e : ListSelectionEvent)
       {
-         if (!isChanging && !tenderDocument.proposal.products.isEmpty())
+         if (proposalTableModel.productRows.isNotEmpty())
          {
             selectedProductNum = (e.getSource() as DefaultListSelectionModel).getLeadSelectionIndex()
-            showProductInfo(getValueAt( selectedProductNum, 0 ).toString())
+            showProduct(getValueAt( selectedProductNum, 0 ).toString())
          }
       }
    }

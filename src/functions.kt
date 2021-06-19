@@ -50,7 +50,7 @@ internal fun overwriteAccept (file : File) : Boolean
 }
 
 /** Displays product info in the info panel. */
-internal fun showProductInfo (productId : String)
+internal fun showProduct (productId : String)
 {
    val relation = Session.documents.activeDocument.relation
 

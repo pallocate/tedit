@@ -14,7 +14,7 @@ import tedit.utils.iconsDir
 /** An implementation of JTree, used for selecting products. */
 class KProductTree (treeSelectionHandler : TreeSelectionListener, mouseHandler : MouseListener) : JTree()
 {
-   var treeTop : DefaultMutableTreeNode                = DefaultMutableTreeNode( KProductInfo() )
+   var treeTop : DefaultMutableTreeNode                = DefaultMutableTreeNode( KProduct_v1() )
    var searchResult                                    = ArrayList<DefaultMutableTreeNode>(0)
    var searchResultIndex                               = 0
    internal var model : DefaultTreeModel               = DefaultTreeModel( treeTop )
@@ -38,7 +38,7 @@ class KProductTree (treeSelectionHandler : TreeSelectionListener, mouseHandler :
          fun getTreeCellRendererComponent( t : JTree, dmt : Object, s : Boolean, e : Boolean, isLeaf : Boolean, r : Int, f : Boolean) : Component
          {
             super.getTreeCellRendererComponent( t, dmt, s, e, isLeaf, r, f )
-            if (!isLeaf && ((dmt as DefaultMutableTreeNode).getUserObject() as KProductInfo).analogue && analogueIcon != null)
+            if (!isLeaf && ((dmt as DefaultMutableTreeNode).getUserObject() as KProduct_v1).analogue && analogueIcon != null)
                setIcon( analogueIcon )
             return this
          }
@@ -71,17 +71,17 @@ class KProductTree (treeSelectionHandler : TreeSelectionListener, mouseHandler :
       }
    }
 
-   fun productInfo (product : KProduct, dmt : DefaultMutableTreeNode = treeTop) : KProductInfo
+   fun product (productId : Long, dmt : DefaultMutableTreeNode = treeTop) : KProduct_v1
    {
-      var ret = KProductInfo.void()
+      var ret = KProduct_v1.void()
       val children = dmt.children()
 
       while (ret.isVoid() && children.hasMoreElements())
-         ret = productInfo( product, children.nextElement() as DefaultMutableTreeNode )
+         ret = product( productId, children.nextElement() as DefaultMutableTreeNode )
 
-      val productInfo = dmt.getUserObject() as KProductInfo
-      if (productInfo.id == product.id)
-         ret = KQuantableProductInfo( productInfo, product.qty )
+      val product = dmt.getUserObject() as KProduct_v1
+      if (product.id == productId)
+         ret = product
 
       return ret
    }
@@ -103,10 +103,10 @@ class KProductTree (treeSelectionHandler : TreeSelectionListener, mouseHandler :
       while (children.hasMoreElements())
          searchNode( searchTerm, children.nextElement() as DefaultMutableTreeNode, result, includeDescription )
 
-      if ((dmt.getUserObject() as KProductInfo).name.toLowerCase().indexOf( searchTerm.toLowerCase() ) >= 0)
+      if ((dmt.getUserObject() as KProduct_v1).name.toLowerCase().indexOf( searchTerm.toLowerCase() ) >= 0)
          result += dmt
       else if (includeDescription)
-         if ((dmt.getUserObject() as KProductInfo).desc.toLowerCase().indexOf( searchTerm.toLowerCase() ) >= 0)
+         if ((dmt.getUserObject() as KProduct_v1).desc.toLowerCase().indexOf( searchTerm.toLowerCase() ) >= 0)
             result += dmt
    }
 
@@ -130,7 +130,7 @@ class KProductTree (treeSelectionHandler : TreeSelectionListener, mouseHandler :
          var n : TreeNode? = treeNode
          while (ret == false && n != null)
          {
-            if (((n as DefaultMutableTreeNode).getUserObject() as KProductInfo).analogue)
+            if (((n as DefaultMutableTreeNode).getUserObject() as KProduct_v1).analogue)
                ret = true
 
             if (treeNode.isLeaf)

@@ -8,7 +8,7 @@ import org.xml.sax.Attributes
 import org.xml.sax.helpers.DefaultHandler
 import javax.swing.tree.DefaultMutableTreeNode
 import java.util.Stack
-import pen.eco.KProductInfo
+import pen.eco.KProduct_v1
 import pen.Log
 
 /** Builds a tree structure of products from an XML file. */
@@ -34,7 +34,7 @@ object ProductTreeParser
                if (qName == "product")
                {
                   val dmtn : DefaultMutableTreeNode = DefaultMutableTreeNode()
-                  var product = KProductInfo( attr.getValue( "id" ).orEmpty(), attr.getValue( "name" ).orEmpty(),
+                  var product = KProduct_v1( attr.getValue( "id" ).orEmpty(), attr.getValue( "name" ).orEmpty(),
                   attr.getValue( "desc" ).orEmpty(), attr.getValue( "amount" ).orEmpty(), attr.getValue( "prefix" ).orEmpty(),
                   attr.getValue( "unit" ).orEmpty(), attr.getValue( "change" ).orEmpty(), attr.getValue( "price" ).orEmpty(),
                   attr.getValue( "sensetive" ).orEmpty(), attr.getValue( "analogue" ).orEmpty() )

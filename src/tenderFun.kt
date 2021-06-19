@@ -4,7 +4,7 @@ import javax.swing.JOptionPane
 import javax.swing.JFileChooser
 import pen.generateId
 import pen.eco.KProposal
-import pen.eco.KHeader
+import pen.eco.KProposalMeta_v1
 import tedit.Lang
 import tedit.session.Session
 import tedit.session.KTenderDocument
@@ -19,8 +19,8 @@ internal fun newDocument ()
    if (!selectedRelation.isVoid())
    {
       val settings = Session.settings
-      val header = KHeader( generateId(), settings.year(), settings.iteration(), selectedRelation.target )
-      val proposal = KProposal( header )
+      val proposalMeta = KProposalMeta_v1( generateId(), settings.year(), settings.iteration(), selectedRelation.target )
+      val proposal = KProposal( proposalMeta )
       val document = KTenderDocument( proposal, selectedRelation )
 
       val tab = document.proposalTable.tab
