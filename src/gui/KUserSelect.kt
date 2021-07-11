@@ -10,8 +10,8 @@ import tedit.utils.iconsDir
 /** A user selection dialog. */
 class KUserSelect (users : List<KUser>) : SelectionDialog( null, "Select user" )
 {
-   override protected val TEXT                         = "Who are you?"
-   override protected val selectionCombo               = JComboBox<KUser>()
+   override val TEXT = "Who are you?"
+   override val selectionCombo = JComboBox<KUser>()
 
    init
    {

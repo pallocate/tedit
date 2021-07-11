@@ -24,8 +24,6 @@ import tedit.Lang
 import tedit.session.KTenderDocument
 import tedit.gui.KProposalTable
 
-data class KProductRow (val product : KProduct_v1, val productQuantity : KProductQuantity)
-
 /** A table for showing products and edit quantities. */
 class KProposalTable (internal val tenderDocument : KTenderDocument) : JTable()
 {
@@ -63,7 +61,7 @@ class KProposalTable (internal val tenderDocument : KTenderDocument) : JTable()
    /** Resets the table using info from proposal. */
    internal fun setup ()
    {
-      proposalTableModel.addAll( tenderDocument.proposal )
+      proposalTableModel.addAll( tenderDocument.productQuantities )
       setModel( proposalTableModel )
 
       with (columnModel) {

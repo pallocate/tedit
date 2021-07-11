@@ -11,11 +11,9 @@ import tedit.updateTitle
 import tedit.utils.progressPath
 import tedit.session.Session
 
-object NoTab : JScrollPane()
-
 class KTabs () : JTabbedPane(), ChangeListener
 {
-   internal var activeTab : JScrollPane = NoTab
+   internal var activeTab : JScrollPane = VoidTab
 
    init
    {addChangeListener( this )}

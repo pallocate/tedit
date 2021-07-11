@@ -11,8 +11,8 @@ import tedit.utils.iconsDir
 /** A selection dialog to let the user select a relation. */
 class KRelationSelect (relations : ArrayList<KRelation>) : SelectionDialog(GUI.frame, Lang.word( 330 ))
 {
-   override protected val TEXT                         = Lang.word( 206 )
-   override protected val selectionCombo               = JComboBox<KRelation>()
+   override val TEXT = Lang.word( 206 )
+   override val selectionCombo = JComboBox<KRelation>()
 
    init
    {

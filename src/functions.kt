@@ -19,7 +19,7 @@ enum class FileCooserMode
 /** Sets the title according to file name and modification status. */
 internal fun updateTitle () = with( Session.documents.activeDocument )
 {
-   val title = Lang.word( 301 ) + " - " + filename() + if (proposalTable.modified) " *" else ""
+   val title = Lang.word( 301 ) + " - " + filenameExcludePath() + if (proposalTable.modified) " *" else ""
    GUI.frame.setTitle( title )
 }
 
@@ -49,7 +49,7 @@ internal fun overwriteAccept (file : File) : Boolean
    return result == JOptionPane.YES_OPTION
 }
 
-/** Displays product info in the info panel. */
+/** Displays product info in the info pane. */
 internal fun showProduct (productId : String)
 {
    val relation = Session.documents.activeDocument.relation
@@ -62,7 +62,7 @@ internal fun showProduct (productId : String)
             "productinfo"
          , productId + ".html" )
 
-      GUI.info.load( infoPath.toFile() )
+      GUI.infoPane.load( infoPath.toFile() )
    }
 }
 
@@ -71,7 +71,7 @@ internal fun optionalSave (unsavedDocument : KTenderDocument) : Boolean
 {
    var procede = true
    val buttonTexts = arrayOf( Lang.word( 18 ), Lang.word( 9 ), Lang.word( 11 ) )
-   val choise = JOptionPane.showOptionDialog( GUI.frame, "\"${unsavedDocument.filename()}\" ${Lang.word(49)}\n${Lang.word(71)}",
+   val choise = JOptionPane.showOptionDialog( GUI.frame, "\"${unsavedDocument.filenameExcludePath()}\" ${Lang.word(49)}\n${Lang.word(71)}",
    Lang.word( 34 ), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, buttonTexts, buttonTexts[2]);
 
    if (choise == JOptionPane.YES_OPTION)
@@ -90,11 +90,14 @@ internal fun actualSave (document : KTenderDocument) : Boolean
    if (success)
    {
       document.proposalTable.modified = false
-      GUI.tabs.setTitleAt( GUI.tabs.selectedIndex, document.filename() )
+      GUI.tabs.setTitleAt( GUI.tabs.selectedIndex, document.filenameExcludePath() )
       updateTitle()
    }
    else
-      JOptionPane.showMessageDialog(GUI.frame, "\"${document.filename()}\" ${Lang.word(73)}", Lang.word( 74 ), JOptionPane.ERROR_MESSAGE )
+      couldNotBeSavedDialog( document.filenameExcludePath() )
 
    return success
 }
+
+internal fun couldNotBeSavedDialog (filename : String) = JOptionPane.showMessageDialog(GUI.frame, 
+   "\"$filename()\" ${Lang.word(73)}", Lang.word( 74 ), JOptionPane.ERROR_MESSAGE)

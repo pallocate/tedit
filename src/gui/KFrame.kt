@@ -29,7 +29,7 @@ class KFrame () : JFrame(), WindowListener
                   setDividerSize( 6 )
                   setDividerLocation( 450 )
                   setLeftComponent( GUI.tabs )
-                  setRightComponent( GUI.info )
+                  setRightComponent( GUI.infoPane )
                })
             }
          , BorderLayout.CENTER )
@@ -41,7 +41,7 @@ class KFrame () : JFrame(), WindowListener
       }
 
       val startPage = Paths.get( usersDir.toString(), Session.user.me.contact.info.name, Session.settings.progression(), "index.html" )
-      GUI.info.load( startPage.toFile() )
+      GUI.infoPane.load( startPage.toFile() )
       setJMenuBar( KMenu() )
 
       setTitle(Lang.word( 301 ))

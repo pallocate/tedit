@@ -27,7 +27,7 @@ abstract class SelectionDialog (owner : Frame?, title : String) : JDialog( owner
          })
 
          add( JPanel().apply {
-            add( selectionCombo )  
+            add( selectionCombo )
          })
 
          add( JLabel() )
@@ -39,4 +39,3 @@ abstract class SelectionDialog (owner : Frame?, title : String) : JDialog( owner
       setVisible( true )
    }
 }
-

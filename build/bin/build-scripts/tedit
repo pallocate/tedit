@@ -8,7 +8,7 @@ if [ $1 ]; then
 fi
 
 TEDIT="build/dist/platform/jvm/tedit/apps.jar:build/dist/platform/jvm/tedit/tedit.jar"
-DEPENDENCIES=$PEN:$PLUGINS:$PEN_TESTS:$APACHE_COMMON:$IROHA_ED25519
+DEPENDENCIES=$PEN:$PLUGINS:$PEN_UTILS:$APACHE_COMMON:$IROHA_ED25519
 
 if [ $task = "compile" ]; then
    DEPENDENCIES=$DEPENDENCIES:$SERIAL_RUN

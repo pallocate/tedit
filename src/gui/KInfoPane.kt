@@ -9,7 +9,7 @@ import javax.swing.event.HyperlinkEvent
 import pen.Log
 
 /** Web browser pane for showing product info etc. */
-class KInfo () : JEditorPane(), HyperlinkListener
+class KInfoPane () : JEditorPane(), HyperlinkListener
 {
    init
    {

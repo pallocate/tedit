@@ -12,7 +12,7 @@ import tedit.EventHandler
 import tedit.Lang
 import tedit.utils.iconsDir
 
-/** The "hamburger" menu in simple mode. */
+/** The pop-up hamburger menu. */
 class KHamburgerMenu () : JPopupMenu(), ActionListener
 {
    internal var hamburgerButton : AbstractButton = JMenuItem()

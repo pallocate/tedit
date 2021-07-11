@@ -25,7 +25,7 @@ class KSettings ()
    }
 
    private val progress                                = "2021:1"
-   val toolbar                                         = true
+   internal val toolbar                                = true
 
    /** Does a crude format validation before returning the progress. */
    fun progression () : String
@@ -42,5 +42,5 @@ class KSettings ()
    fun year () = progression().substringBefore( ':' ).toInt()
 
    /** Saves settings to file. */
-   internal fun save () = serializeToFile<KSettings>( this, settingsFile.toString(), serializer() )
+   fun save () = serializeToFile<KSettings>( this, settingsFile.toString(), serializer() )
 }

@@ -11,13 +11,13 @@ import tedit.utils.KProductTree
 import tedit.FileCooserMode
 import tedit.Lang
 
-/** GUI starting point and some miscellany references */
+/** GUI starting point as well as some miscellany internally used references. */
 object GUI
 {
    internal val frame by lazy { KFrame() }
    internal val tabs                                            = KTabs()
    internal val productTree                                     = KProductTree( KTreeSelectionHandler(), KMouseHandler() )
-   internal val info                                            = KInfo()
+   internal val infoPane                                            = KInfoPane()
    internal val hamburgerMenu                                   = KHamburgerMenu()
    private val _fileChooser                                     = JFileChooser(File(System.getProperty( "user.dir" )))
 

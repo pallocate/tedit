@@ -5,7 +5,7 @@ import javax.swing.JOptionPane
 import javax.swing.JLabel
 import javax.swing.tree.DefaultMutableTreeNode
 import pen.eco.Target
-import pen.eco.KProposal
+import pen.eco.KProductQuantities
 import pen.eco.KProduct_v1
 import tedit.session.Session
 import tedit.session.KTenderDocument
@@ -47,22 +47,24 @@ object EventHandler
       {
          NEW ->
             newDocument()
+
          OPEN ->
             openDocument()
 
-         /* TODO: Iterate proposal table to get quatities into the tender document. */
          SAVE ->
-            if (activeDocument.isModified() || !activeDocument.isPathSet())
+            if (activeDocument.isModified() || !activeDocument.isFilenameSet())
             {
                activeDocument.updateFromModel()
                saveDocument( activeDocument )
             }
+
          SAVE_AS ->
-            if (activeDocument.isModified() || !activeDocument.isPathSet())
+            if (activeDocument.isModified() || !activeDocument.isFilenameSet())
             {
                activeDocument.updateFromModel()
                saveDocumentAs( activeDocument )
             }
+
          EXPORT_ENCRYPTED ->
             exportEncrypted( activeDocument )
 
@@ -126,8 +128,8 @@ object EventHandler
          CLEAR ->
          {
             with (Session.documents.activeDocument) {
-               proposal = KProposal()
-               pathname = Lang.word( 3 )
+               productQuantities = KProductQuantities()
+               filename = Lang.word( 3 )
                proposalTable.vanilla()
                proposalTable.setup()
             }
@@ -135,7 +137,7 @@ object EventHandler
          }
 
          HELP ->
-            GUI.info.load(helpDir.resolve( "index.html" ).toFile())
+            GUI.infoPane.load(helpDir.resolve( "index.html" ).toFile())
 
          ABOUT ->
             JOptionPane.showMessageDialog( tenderEdit, Lang.word( 301 ), "information", JOptionPane.INFORMATION_MESSAGE )

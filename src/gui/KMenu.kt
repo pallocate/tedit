@@ -8,7 +8,7 @@ import javax.swing.JMenuItem
 import tedit.EventHandler
 import tedit.Lang
 
-/** The application menubar. */
+/** Application menu. */
 class KMenu () : JMenuBar(), ActionListener
 {
    init

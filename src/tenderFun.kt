@@ -3,7 +3,7 @@ package tedit
 import javax.swing.JOptionPane
 import javax.swing.JFileChooser
 import pen.generateId
-import pen.eco.KProposal
+import pen.eco.KProductQuantities
 import pen.eco.KProposalMeta_v1
 import tedit.Lang
 import tedit.session.Session
@@ -20,8 +20,8 @@ internal fun newDocument ()
    {
       val settings = Session.settings
       val proposalMeta = KProposalMeta_v1( generateId(), settings.year(), settings.iteration(), selectedRelation.target )
-      val proposal = KProposal( proposalMeta )
-      val document = KTenderDocument( proposal, selectedRelation )
+      val productQuantities = KProductQuantities( proposalMeta )
+      val document = KTenderDocument( productQuantities, selectedRelation )
 
       val tab = document.proposalTable.tab
       GUI.tabs.addTab(Lang.word( 3 ), tab)
@@ -52,7 +52,7 @@ internal fun openDocument ()
             if (documentOwner == Session.user.me.contact.id)
             {
                val tab = document.proposalTable.tab
-               GUI.tabs.addTab( document.filename(), tab )
+               GUI.tabs.addTab( document.filenameExcludePath(), tab )
                GUI.tabs.setSelectedComponent( tab )
 
                document.proposalTable.setup()
@@ -76,7 +76,7 @@ internal fun closeDocument (document : KTenderDocument)
 internal fun saveDocument (document : KTenderDocument) : Boolean
 {
    var success = false
-   if (document.isPathSet())
+   if (document.isFilenameSet())
    {
       success = actualSave( document )
       if (!success)
@@ -95,7 +95,7 @@ internal fun saveDocumentAs (document : KTenderDocument) : Boolean
 
    if (choosenFile !is VoidFile)
    {
-      document.pathname = choosenFile.absolutePath
+      document.filename = choosenFile.absolutePath
       val name = choosenFile.name
 
       if (choosenFile.exists())
@@ -119,9 +119,11 @@ internal fun exportEncrypted (document : KTenderDocument)
       if (choosenFile.exists())
       {
          if (overwriteAccept( choosenFile ))
-            document.saveEncrypted( choosenFile.name )
+            if (!document.saveEncrypted( choosenFile.name ))
+               couldNotBeSavedDialog( choosenFile.name )
       }
       else
-         document.saveEncrypted( choosenFile.name )
+         if (!document.saveEncrypted( choosenFile.name ))
+            couldNotBeSavedDialog( choosenFile.name )
    }
 }

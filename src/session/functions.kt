@@ -14,7 +14,7 @@ fun activateUser (userId : Long) : KUser
 {
    var ret = KUser.void()
    val users = loadUsers()
-//      listOf( pen.tests.Patricia.user(), pen.tests.David.user() ); saveUsers( users )
+//      listOf( pen.utils.Patricia.user(), pen.utils.David.user() ); saveUsers( users )
 
    if (users.size > 0)
    {
