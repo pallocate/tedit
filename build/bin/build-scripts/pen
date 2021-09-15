@@ -7,8 +7,8 @@ printUsage () {
    echo "Usage: pen task [option]"
    echo
    echo "Tasks:"
-   echo "all            linux          utils"
-   echo "wasm           api"
+   echo "all            linux          wasm"
+   echo "utils          api"
 }
 
 task="jvm"
@@ -18,8 +18,8 @@ fi
 
 ###  JVM  ###
 if [ $task = "jvm" ]; then
-   DEPENDENCIES=$SERIAL_RUN:$COROUTINES:$APACHE_COMMON:$IROHA_ED25519:$JNA
-   cmd-timed "kotlinc -d build/dist/platform/jvm/pen/pen.jar -cp $DEPENDENCIES -Xmulti-platform -Xplugin=$SERIAL_PLUG src/commonMain src/jvmMain"
+   DEPENDENCIES=$SERIALIZATION_RUNTIME:$COROUTINES_CORE:$COROUTINES_CORE_JVM:$APACHE_COMMON:$IROHA_ED25519:$JNA
+   cmd-timed "kotlinc -d $PEN -cp $DEPENDENCIES -Xmulti-platform -Xplugin=$SERIALIZATION_COMPILER_PLUGIN src/commonMain src/jvmMain"
 
 ###  Wasm  ###
 elif [ $task = "wasm" ]; then
@@ -41,12 +41,12 @@ elif [ $1 = "linux" ]; then
 
    if [ $2 -a $2 = "sodium" ]; then
       echo Making sodium.klib
-      cinterop -def src/linux_x64Main/sodium.def -compiler-option -I/usr/include -o sodium
+      cinterop -def src/linux_x64Main/sodium.def -compiler-option -I/usr/include -o build/lib/libsodium/sodium
       rm -Rf sodium-build
 
    else
       SOURCES="src/commonMain src/native_serializtion_hack src/linux_x64Main"
-      kotlinc-native -target linux_x64 -o linux-tests -Xmulti-platform $SOURCES -library sodium -linker-options "-L/usr/lib -lsodium"
+      kotlinc-native -target linux_x64 -o linux-tests -Xmulti-platform $SOURCES -library build/lib/libsodium/sodium -linker-options "-L/usr/lib -lsodium"
 
       if [ $? -eq 0 ]; then
          mv linux-tests.kexe sodium.klib build/dist/platform/linux_x64Main
@@ -60,14 +60,12 @@ elif [ $1 = "linux" ]; then
 
 ###  Utils  ###
 elif [ $task = "utils" ]; then
-   DEPENDENCIES=$JUNIT:$PEN:$IRC:$JNA:$SERIAL_RUN:$JNA
-   kotlinc -d build/dist/platform/jvm/pen/utils.jar -cp $DEPENDENCIES -Xmulti-platform src/commonUtils
+   kotlinc -d $PEN_UTILS -cp $PEN -Xmulti-platform src/commonUtils
 
 ###  Api  ###
 elif [ $task = "docs" ]; then
-   clear
    echo "Building docs.." ; echo
-   java -cp $STDLIB -jar $DOKKA src/commonMain src/jvmMain -output build/docs/pen/api
+   java -jar $DOKKA_FATJAR -src src/commonMain;src/jvmMain -outputDir build/docs/pen/api 
 
 else
    printUsage

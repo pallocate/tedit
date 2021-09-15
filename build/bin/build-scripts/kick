@@ -7,8 +7,9 @@ if [ $1 ]; then
    task=$1
 fi
 
-DEPENDENCIES=$COROUTINES:$KROTO_COROUTINES:$GRPC_PROTOBUF:$GRPC_CONTEXT:$GRPC_CORE:$GRPC_STUB:$GRPC_API:$GUAVA:$JNA:\
-$GRPC_PROTOBUF_LITE:$PROTOBUF_JAVA:$PERFMARK:$GRPC_NETTY_SHADED:$PROTOCOL:$PEN:$PEN_TESTS:$APACHE_COMMON:$IROHA_ED25519
+DEPENDENCIES=$COROUTINES_CORE:$COROUTINES_CORE_JVM:$KROTO_PLUS_COROUTINES:$GRPC_PROTOBUF:$GRPC_CONTEXT:$GRPC_CORE:\
+$GRPC_STUB:$GRPC_API:$GUAVA:$JNA:$GRPC_PROTOBUF_LITE:$PROTOBUF_JAVA:$PERFMARK:$GRPC_NETTY_SHADED:$PROTOCOL:$PEN:\
+$APACHE_COMMON:$IROHA_ED25519
 
 if [ $task = "compile" ]; then
    kotlinc -cp $DEPENDENCIES -d $KICK src/jvm src/jvm_utils
@@ -21,7 +22,7 @@ elif [ $task = "tests" ]; then
 
 elif [ $task = "docs" ]; then
    java -cp $STDLIB:$DEPENDENCIES -jar $DOKKA src/jvm -output build/docs/kick/api
-   
+
 else
    echo "Usage: build kick [compile|run|tests|docs]"; echo
 

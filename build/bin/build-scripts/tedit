@@ -11,12 +11,12 @@ TEDIT="build/dist/platform/jvm/tedit/apps.jar:build/dist/platform/jvm/tedit/tedi
 DEPENDENCIES=$PEN:$PLUGINS:$PEN_UTILS:$APACHE_COMMON:$IROHA_ED25519
 
 if [ $task = "compile" ]; then
-   DEPENDENCIES=$DEPENDENCIES:$SERIAL_RUN
-   cmd-timed "kotlinc -d build/dist/platform/jvm/tedit/tedit.jar -cp $DEPENDENCIES -Xplugin=$SERIAL_PLUG src"
+   DEPENDENCIES=$DEPENDENCIES:$SERIALIZATION_RUNTIME
+   cmd-timed "kotlinc -d build/dist/platform/jvm/tedit/tedit.jar -cp $DEPENDENCIES -Xplugin=$SERIALIZATION_COMPILER_PLUGIN src"
 
 elif [ $task = "run" ]; then
    echo Running..
-   DEPENDENCIES=$JNA:$SERIAL_RUN:$TEDIT:$DEPENDENCIES
+   DEPENDENCIES=$JNA:$SERIALIZATION_RUNTIME:$TEDIT:$DEPENDENCIES
    kotlin -cp $DEPENDENCIES tedit.Main $2 $3 $4 $5
 
 elif [ $task = "docs" ]; then
